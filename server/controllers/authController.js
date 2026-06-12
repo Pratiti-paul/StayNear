@@ -1,10 +1,12 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
-import { validationResult } from "express-validator";
 
 const generateToken = (id, role) => {
   return jwt.sign(
-    { id, role },
+    {
+      id,
+      role,
+    },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_EXPIRE,
@@ -12,25 +14,10 @@ const generateToken = (id, role) => {
   );
 };
 
+// REGISTER
 export const register = async (req, res) => {
   try {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        errors: errors.array(),
-      });
-    }
-
     const { name, email, password, role } = req.body;
-
-    if (!["seeker", "owner"].includes(role)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid role",
-      });
-    }
 
     const existingUser = await User.findOne({ email });
 
@@ -41,35 +28,39 @@ export const register = async (req, res) => {
       });
     }
 
-    await User.create({
+    // Prevent admin signup
+    const safeRole = role === "owner" ? "owner" : "seeker";
+
+    const user = await User.create({
       name,
       email,
       password,
-      role,
+      role: safeRole,
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
-      message: "Registration successful. Please login.",
+      message: "Account created successfully",
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
 
+// LOGIN
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       });
     }
 
@@ -78,13 +69,13 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials",
+        message: "Invalid email or password",
       });
     }
 
     const token = generateToken(user._id, user.role);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       token,
       user: {
@@ -95,23 +86,24 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
 
+// CURRENT USER
 export const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id);
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       user,
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });
