@@ -13,7 +13,7 @@ export const protect = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Not authorized. Please login.",
+      message: "Not authorized",
     });
   }
 
@@ -26,7 +26,7 @@ export const protect = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired token.",
+      message: "Invalid token",
     });
   }
 };
@@ -36,7 +36,7 @@ export const authorize = (...roles) => {
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: `Role '${req.user.role}' is not authorized.`,
+        message: "Access denied",
       });
     }
 

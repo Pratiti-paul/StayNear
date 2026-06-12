@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -13,21 +13,14 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/register" element={<Register />} />
 
+        {/* Owner Only */}
         <Route
           path="/owner"
           element={
@@ -37,6 +30,7 @@ function App() {
           }
         />
 
+        {/* Admin Only */}
         <Route
           path="/admin"
           element={
@@ -44,6 +38,12 @@ function App() {
               <Admin />
             </ProtectedRoute>
           }
+        />
+
+        {/* Fallback */}
+        <Route
+          path="*"
+          element={<Navigate to="/" />}
         />
 
       </Routes>

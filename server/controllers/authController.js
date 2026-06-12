@@ -14,7 +14,6 @@ const generateToken = (id, role) => {
   );
 };
 
-// REGISTER
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -28,19 +27,19 @@ export const register = async (req, res) => {
       });
     }
 
-    // Prevent admin signup
-    const safeRole = role === "owner" ? "owner" : "seeker";
-
     const user = await User.create({
       name,
       email,
       password,
-      role: safeRole,
+      role,
     });
+
+    const token = generateToken(user._id, user.role);
 
     res.status(201).json({
       success: true,
-      message: "Account created successfully",
+      token,
+      user,
     });
   } catch (error) {
     res.status(500).json({
@@ -50,17 +49,16 @@ export const register = async (req, res) => {
   }
 };
 
-// LOGIN
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid credentials",
       });
     }
 
@@ -69,7 +67,14 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid credentials",
+      });
+    }
+
+    if (user.role !== role) {
+      return res.status(401).json({
+        success: false,
+        message: "Role does not match",
       });
     }
 
@@ -78,12 +83,7 @@ export const login = async (req, res) => {
     res.status(200).json({
       success: true,
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      user,
     });
   } catch (error) {
     res.status(500).json({
@@ -93,7 +93,6 @@ export const login = async (req, res) => {
   }
 };
 
-// CURRENT USER
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);

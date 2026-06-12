@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { loginUser } from "../services/authService";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -8,79 +8,77 @@ function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "seeker",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await loginUser(formData);
+    const res = await axios.post(
+      "http://localhost:5002/api/auth/login",
+      formData
+    );
 
-      localStorage.setItem(
-        "token",
-        res.data.token
-      );
+    localStorage.setItem("token", res.data.token);
 
-      localStorage.setItem(
-        "role",
-        res.data.user.role
-      );
+    const role = res.data.user.role;
 
-      if (res.data.user.role === "seeker") {
-        navigate("/");
-      }
+    if (role === "seeker") {
+      navigate("/");
+    }
 
-      if (res.data.user.role === "owner") {
-        navigate("/owner");
-      }
+    if (role === "owner") {
+      navigate("/owner");
+    }
 
-      if (res.data.user.role === "admin") {
-        navigate("/admin");
-      }
-    } catch (error) {
-      alert(error.response?.data?.message);
+    if (role === "admin") {
+      navigate("/admin");
     }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-lg p-8 rounded-xl w-96"
+    <form onSubmit={handleSubmit}>
+      <h1>Login</h1>
+
+      <input
+        type="email"
+        placeholder="Email"
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            email: e.target.value,
+          })
+        }
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            password: e.target.value,
+          })
+        }
+      />
+
+      <select
+        onChange={(e) =>
+          setFormData({
+            ...formData,
+            role: e.target.value,
+          })
+        }
       >
-        <h1 className="text-2xl font-bold mb-6">
-          Login
-        </h1>
+        <option value="seeker">Seeker</option>
+        <option value="owner">Owner</option>
+        <option value="admin">Admin</option>
+      </select>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-3 mb-3"
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              email: e.target.value,
-            })
-          }
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-3 mb-4"
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              password: e.target.value,
-            })
-          }
-        />
-
-        <button className="bg-blue-600 text-white w-full py-3 rounded">
-          Login
-        </button>
-      </form>
-    </div>
+      <button type="submit">
+        Login
+      </button>
+    </form>
   );
 }
 
