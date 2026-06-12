@@ -10,13 +10,10 @@ import pgRoutes from "./routes/pg.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import inquiryRoutes from "./routes/inquiry.js";
 
-// Load environment variables
 dotenv.config();
 
-// Initialize Express app
 const app = express();
 
-// Connect to database
 connectDB();
 
 // Middleware
