@@ -24,14 +24,17 @@ function Login() {
     const role = res.data.user.role;
 
     if (role === "seeker") {
-      navigate("/");
+      localStorage.setItem("role", role);
+      navigate("/home");
     }
 
     if (role === "owner") {
+      localStorage.setItem("role", role);
       navigate("/owner");
     }
 
     if (role === "admin") {
+      localStorage.setItem("role", role);
       navigate("/admin");
     }
   };

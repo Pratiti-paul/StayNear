@@ -13,14 +13,23 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        {/* Default Page */}
+        <Route path="/" element={<Login />} />
 
-        <Route path="/login" element={<Login />} />
-
+        {/* Register */}
         <Route path="/register" element={<Register />} />
 
-        {/* Owner Only */}
+        {/* Seeker Home */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Owner */}
         <Route
           path="/owner"
           element={
@@ -30,7 +39,7 @@ function App() {
           }
         />
 
-        {/* Admin Only */}
+        {/* Admin */}
         <Route
           path="/admin"
           element={
@@ -40,11 +49,8 @@ function App() {
           }
         />
 
-        {/* Fallback */}
-        <Route
-          path="*"
-          element={<Navigate to="/" />}
-        />
+        {/* Unknown Routes */}
+        <Route path="*" element={<Navigate to="/" />} />
 
       </Routes>
     </BrowserRouter>
