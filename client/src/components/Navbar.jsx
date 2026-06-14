@@ -1,77 +1,99 @@
 import { Link } from "react-router-dom";
-import { Building2, Bell, User } from "lucide-react";
+import {
+  Building2,
+  Bell,
+  User,
+} from "lucide-react";
 
 function Navbar() {
-return ( <nav className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50"> <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+  return (
+    <nav className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800 shadow-lg">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="h-20 flex items-center justify-between">
 
-    {/* Logo */}
-    <Link
-      to="/home"
-      className="flex items-center gap-2"
-    >
-      <Building2
-        size={30}
-        className="text-teal-700"
-      />
+          {/* Logo */}
+          <Link
+            to="/home"
+            className="flex items-center gap-3"
+          >
+            <div className="w-12 h-12 rounded-xl bg-teal-600 flex items-center justify-center">
+              <Building2
+                size={28}
+                className="text-white"
+              />
+            </div>
 
-      <span className="text-2xl font-bold text-slate-900">
-        StayNear
-      </span>
-    </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-white leading-none">
+                StayNear
+              </h1>
 
-    {/* Navigation */}
-    <div className="hidden md:flex items-center gap-10">
-      <Link
-        to="/home"
-        className="font-medium text-slate-700 hover:text-teal-700 transition"
-      >
-        Home
-      </Link>
+              <p className="text-xs text-slate-400 mt-1">
+                Find. Compare. Connect.
+              </p>
+            </div>
+          </Link>
 
-      <Link
-        to="/explore"
-        className="font-medium text-slate-700 hover:text-teal-700 transition"
-      >
-        Explore
-      </Link>
+          {/* Center Navigation */}
+          <div className="hidden md:flex items-center gap-10">
+            <Link
+              to="/home"
+              className="font-medium text-slate-300 hover:text-teal-400 transition"
+            >
+              Home
+            </Link>
 
-      <Link
-        to="/wishlist"
-        className="font-medium text-slate-700 hover:text-teal-700 transition"
-      >
-        Wishlist
-      </Link>
+            <Link
+              to="/explore"
+              className="font-medium text-slate-300 hover:text-teal-400 transition"
+            >
+              Explore
+            </Link>
 
-      <Link
-        to="/inquiries"
-        className="font-medium text-slate-700 hover:text-teal-700 transition"
-      >
-        My Inquiries
-      </Link>
-    </div>
+            <Link
+              to="/wishlist"
+              className="font-medium text-slate-300 hover:text-teal-400 transition"
+            >
+              Wishlist
+            </Link>
 
-    {/* Right Side */}
-    <div className="flex items-center gap-3">
+            <Link
+              to="/inquiries"
+              className="font-medium text-slate-300 hover:text-teal-400 transition"
+            >
+              Inquiries
+            </Link>
+          </div>
 
-      <button className="p-2 rounded-full hover:bg-slate-100 transition">
-        <Bell size={20} />
-      </button>
+          {/* Right Side */}
+          <div className="flex items-center gap-4">
 
-      <Link
-        to="/profile"
-        className="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-xl hover:bg-slate-200 transition"
-      >
-        <User size={18} />
-        Profile
-      </Link>
+            <button className="p-2 rounded-xl hover:bg-slate-800 transition">
+              <Bell
+                size={20}
+                className="text-slate-300"
+              />
+            </button>
 
-    </div>
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition"
+            >
+              <User
+                size={18}
+                className="text-slate-300"
+              />
 
-  </div>
-</nav>
+              <span className="font-medium text-slate-300">
+                Profile
+              </span>
+            </Link>
 
-
-);
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 }
 
 export default Navbar;

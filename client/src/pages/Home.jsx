@@ -1,16 +1,19 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Home() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-slate-50">
+
       <Navbar />
 
-      <div className="p-10">
-        <h1 className="text-4xl font-bold">
-          Home Page
-        </h1>
-      </div>
-    </>
+      <main className="flex-1">
+        {/* Hero Section Here */}
+      </main>
+
+      <Footer />
+
+    </div>
   );
 }
 
