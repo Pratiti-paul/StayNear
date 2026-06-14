@@ -5,6 +5,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Owner from "./pages/Owner";
 import Admin from "./pages/Admin";
+import Explore from "./pages/Explore";
+import Wishlist from "./pages/Wishlist";
+import Inquiries from "./pages/Inquiries";
+import Profile from "./pages/Profile";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -51,7 +55,11 @@ function App() {
 
         {/* Unknown Routes */}
         <Route path="*" element={<Navigate to="/" />} />
-
+        <Route path="/home" element={<Home />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/inquiries" element={<Inquiries />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

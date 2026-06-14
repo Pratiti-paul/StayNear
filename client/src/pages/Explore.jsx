@@ -1,17 +1,17 @@
 import Navbar from "../components/Navbar";
 
-function Profile() {
+function Explore() {
   return (
     <>
       <Navbar />
 
       <div className="p-10">
         <h1 className="text-4xl font-bold">
-          Profile
+          Explore PGs
         </h1>
       </div>
     </>
   );
 }
 
-export default Profile;
+export default Explore;
