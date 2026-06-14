@@ -1,2 +1,54 @@
 @import "tailwindcss";
 
+@layer base {
+	html {
+		background: #f8fafc;
+		color: #0f172a;
+	}
+
+	body {
+		min-height: 100vh;
+		background:
+			radial-gradient(circle at top left, rgba(6, 182, 212, 0.12), transparent 35%),
+			radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 28%),
+			#f8fafc;
+		color: #0f172a;
+		@apply antialiased;
+	}
+
+	::selection {
+		background: rgba(15, 118, 110, 0.16);
+		color: #0f172a;
+	}
+}
+
+@layer components {
+	.staynear-page-shell {
+		@apply min-h-screen bg-slate-50 text-slate-900;
+	}
+
+	.staynear-card {
+		@apply rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70;
+	}
+
+	.staynear-input {
+		@apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/15;
+	}
+
+	.staynear-select {
+		@apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/15;
+	}
+
+	.staynear-button-primary {
+		@apply inline-flex items-center justify-center rounded-xl bg-teal-700 px-4 py-3 font-semibold text-white shadow-lg shadow-teal-700/20 transition duration-200 hover:bg-teal-800 hover:shadow-teal-700/30 focus:outline-none focus:ring-4 focus:ring-teal-500/25;
+	}
+
+	.staynear-button-secondary {
+		@apply inline-flex items-center justify-center rounded-xl bg-cyan-500 px-4 py-3 font-semibold text-white shadow-lg shadow-cyan-500/20 transition duration-200 hover:bg-cyan-600 hover:shadow-cyan-500/30 focus:outline-none focus:ring-4 focus:ring-cyan-500/25;
+	}
+
+	.staynear-link {
+		@apply font-semibold text-teal-700 transition hover:text-teal-800;
+	}
+}
+
