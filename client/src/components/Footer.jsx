@@ -4,9 +4,9 @@ import {
   MapPin,
   Phone,
   Mail,
-  Facebook,
-  Twitter,
-  Linkedin,
+  Globe,
+  MessageCircle,
+  Send,
 } from "lucide-react";
 
 function Footer() {
@@ -41,9 +41,9 @@ function Footer() {
             </p>
 
             <div className="flex gap-3 mt-6">
-              <Facebook className="hover:text-teal-400 cursor-pointer" />
-              <Twitter className="hover:text-teal-400 cursor-pointer" />
-              <Linkedin className="hover:text-teal-400 cursor-pointer" />
+              <Globe className="hover:text-teal-400 cursor-pointer" />
+              <MessageCircle className="hover:text-teal-400 cursor-pointer" />
+              <Send className="hover:text-teal-400 cursor-pointer" />
             </div>
           </div>
 
