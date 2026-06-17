@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import heroBanner from "../assets/hero_banner.png";
 
 function Home() {
   return (
@@ -8,7 +9,7 @@ function Home() {
       <Navbar />
 
       <main className="flex-1">
-        {/* Hero Section Here */}
+        <img src={heroBanner} alt="Hero Banner" className="w-full object-cover" />
       </main>
 
       <Footer />
