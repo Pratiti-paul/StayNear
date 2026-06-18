@@ -1,28 +1,41 @@
+import { Link } from "react-router-dom";
+import {
+  Home,
+  Building2,
+  BedDouble,
+  Users,
+  ArrowRight,
+} from "lucide-react";
+
 function CategoriesSection() {
   const categories = [
     {
       title: "Girls PG",
-      price: "Starting from ₹6,500/month",
-      image:
-        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700",
+      description:
+        "Safe, secure and verified accommodation designed for female students.",
+      listings: "250+ Listings",
+      icon: Users,
     },
     {
       title: "Boys PG",
-      price: "Starting from ₹5,500/month",
-      image:
-        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700",
+      description:
+        "Affordable rooms near colleges with modern amenities and facilities.",
+      listings: "320+ Listings",
+      icon: BedDouble,
     },
     {
       title: "Student Hostels",
-      price: "Starting from ₹4,000/month",
-      image:
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=700",
+      description:
+        "Budget-friendly hostels offering comfortable student living.",
+      listings: "180+ Listings",
+      icon: Building2,
     },
     {
       title: "Shared Flats",
-      price: "Starting from ₹8,000/month",
-      image:
-        "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=700",
+      description:
+        "Fully furnished shared apartments for independent student living.",
+      listings: "140+ Listings",
+      icon: Home,
     },
   ];
 
@@ -39,15 +52,18 @@ function CategoriesSection() {
               Explore by Category
             </h2>
 
-            <p className="mt-4 text-lg text-slate-600">
-              Find accommodation that perfectly matches your lifestyle,
-              comfort and budget.
+            <p className="mt-4 text-lg text-slate-600 max-w-2xl">
+              Browse verified accommodation options tailored to every
+              student's lifestyle, comfort and budget.
             </p>
           </div>
 
-          <button className="mt-6 md:mt-0 text-teal-700 font-semibold hover:text-teal-800 transition">
+          <Link
+            to="/explore"
+            className="mt-6 md:mt-0 font-semibold text-teal-700 hover:text-teal-800 transition"
+          >
             View All Categories →
-          </button>
+          </Link>
 
         </div>
 
@@ -55,39 +71,59 @@ function CategoriesSection() {
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
 
-          {categories.map((item, index) => (
-            <div
-              key={index}
-              className="group relative overflow-hidden rounded-3xl shadow-md cursor-pointer"
-            >
-              {/* Image */}
+          {categories.map((item, index) => {
+            const Icon = item.icon;
 
-              <img
-                src={item.image}
-                alt={item.title}
-                className="h-[470px] w-full object-cover transition duration-500 group-hover:scale-110"
-              />
+            return (
+              <Link
+                key={index}
+                to="/explore"
+                className="group rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-teal-200 hover:shadow-xl"
+              >
+                {/* Icon */}
 
-              {/* Dark Overlay */}
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-teal-50 transition-all duration-300 group-hover:bg-teal-600">
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                  <Icon
+                    size={38}
+                    className="text-teal-700 transition-all duration-300 group-hover:text-white"
+                  />
 
-              {/* Content */}
+                </div>
 
-              <div className="absolute bottom-0 left-0 p-6">
+                {/* Title */}
 
-                <h3 className="text-4xl font-bold text-white">
+                <h3 className="mt-8 text-2xl font-bold text-slate-900">
                   {item.title}
                 </h3>
 
-                <p className="mt-2 text-lg text-slate-200">
-                  {item.price}
+                {/* Description */}
+
+                <p className="mt-4 leading-7 text-slate-600">
+                  {item.description}
                 </p>
 
-              </div>
+                {/* Listings */}
 
-            </div>
-          ))}
+                <div className="mt-8 flex items-center justify-between">
+
+                  <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
+                    {item.listings}
+                  </span>
+
+                  <div className="flex items-center gap-2 font-semibold text-teal-700 transition-all duration-300 group-hover:gap-3">
+
+                    Explore
+
+                    <ArrowRight size={18} />
+
+                  </div>
+
+                </div>
+
+              </Link>
+            );
+          })}
 
         </div>
 

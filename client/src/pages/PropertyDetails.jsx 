@@ -1,0 +1,228 @@
+import { useParams } from "react-router-dom";
+import {
+  MapPin,
+  Star,
+  ShieldCheck,
+  Heart,
+  Phone,
+  Calendar,
+  Wifi,
+  Car,
+  Utensils,
+  WashingMachine,
+} from "lucide-react";
+
+import properties from "../data/properties";
+
+function PropertyDetails() {
+  const { id } = useParams();
+
+  const property = properties.find(
+    (item) => item.id === Number(id)
+  );
+
+  if (!property) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-4xl font-bold">
+          Property Not Found
+        </h1>
+      </div>
+    );
+  }
+
+  return (
+    <section className="bg-slate-50 py-16">
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* Image */}
+
+        <img
+          src={property.image}
+          alt={property.name}
+          className="w-full h-[500px] object-cover rounded-3xl shadow-lg"
+        />
+
+        {/* Top */}
+
+        <div className="mt-10 flex flex-col lg:flex-row justify-between gap-8">
+
+          <div>
+
+            <div className="flex items-center gap-3">
+
+              <h1 className="text-5xl font-bold text-slate-900">
+                {property.name}
+              </h1>
+
+              {property.verified && (
+                <ShieldCheck
+                  size={28}
+                  className="text-teal-600"
+                />
+              )}
+
+            </div>
+
+            <div className="flex items-center gap-2 mt-5 text-slate-600">
+
+              <MapPin size={18} />
+
+              {property.location}
+
+            </div>
+
+            <div className="flex items-center gap-2 mt-5">
+
+              <Star
+                size={20}
+                className="fill-yellow-400 text-yellow-400"
+              />
+
+              <span className="font-semibold">
+                {property.rating}
+              </span>
+
+              <span className="text-slate-500">
+                ({property.reviews} Reviews)
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* Price */}
+
+          <div className="bg-white rounded-3xl shadow-md p-8 w-full lg:w-96">
+
+            <h2 className="text-5xl font-bold text-teal-700">
+              ₹{property.price}
+            </h2>
+
+            <p className="text-slate-500">
+              per month
+            </p>
+
+            <button className="mt-8 w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl py-4 font-semibold flex justify-center items-center gap-2">
+
+              <Calendar size={20} />
+
+              Book Visit
+
+            </button>
+
+            <button className="mt-4 w-full border-2 border-teal-600 text-teal-700 rounded-xl py-4 font-semibold flex justify-center items-center gap-2 hover:bg-teal-600 hover:text-white transition">
+
+              <Phone size={20} />
+
+              Contact Owner
+
+            </button>
+
+            <button className="mt-4 w-full border rounded-xl py-4 font-semibold flex justify-center items-center gap-2 hover:bg-slate-100">
+
+              <Heart size={20} />
+
+              Add to Wishlist
+
+            </button>
+
+          </div>
+
+        </div>
+
+        {/* Description */}
+
+        <div className="mt-16">
+
+          <h2 className="text-3xl font-bold text-slate-900">
+            Description
+          </h2>
+
+          <p className="mt-5 text-lg text-slate-600 leading-8">
+            {property.description}
+          </p>
+
+        </div>
+
+        {/* Amenities */}
+
+        <div className="mt-16">
+
+          <h2 className="text-3xl font-bold text-slate-900">
+            Amenities
+          </h2>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+
+            <Amenity
+              icon={<Wifi />}
+              text="High-Speed WiFi"
+            />
+
+            <Amenity
+              icon={<Utensils />}
+              text="Meals Included"
+            />
+
+            <Amenity
+              icon={<WashingMachine />}
+              text="Laundry"
+            />
+
+            <Amenity
+              icon={<Car />}
+              text="Parking"
+            />
+
+          </div>
+
+        </div>
+
+        {/* Property Features */}
+
+        <div className="mt-16">
+
+          <h2 className="text-3xl font-bold text-slate-900">
+            Property Features
+          </h2>
+
+          <div className="flex flex-wrap gap-4 mt-8">
+
+            {property.amenities.map((item) => (
+              <span
+                key={item}
+                className="bg-teal-50 text-teal-700 rounded-full px-5 py-3 font-medium"
+              >
+                {item}
+              </span>
+            ))}
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+function Amenity({ icon, text }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm p-6 flex items-center gap-4">
+
+      <div className="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center text-teal-700">
+
+        {icon}
+
+      </div>
+
+      <span className="font-medium">
+        {text}
+      </span>
+
+    </div>
+  );
+}
+
+export default PropertyDetails;

@@ -1,14 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Owner from "./pages/Owner";
-import Admin from "./pages/Admin";
+
+import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import Wishlist from "./pages/Wishlist";
 import Inquiries from "./pages/Inquiries";
 import Profile from "./pages/Profile";
+
+import Owner from "./pages/Owner";
+import Admin from "./pages/Admin";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -16,17 +18,54 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Default Page */}
+        {/* Authentication */}
         <Route path="/" element={<Login />} />
-
-        {/* Register */}
         <Route path="/register" element={<Register />} />
 
-        {/* Seeker Home */}
+        {/* Seeker Routes */}
         <Route
           path="/home"
-          element={<Home />}
+          element={
+            <ProtectedRoute role="seeker">
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/explore"
+          element={
+            <ProtectedRoute role="seeker">
+              <Explore />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute role="seeker">
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/inquiries"
+          element={
+            <ProtectedRoute role="seeker">
+              <Inquiries />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute role="seeker">
+              <Profile />
+            </ProtectedRoute>
+          }
         />
 
         {/* Owner */}
@@ -49,13 +88,8 @@ function App() {
           }
         />
 
-        {/* Unknown Routes */}
-        <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/inquiries" element={<Inquiries />} />
-        <Route path="/profile" element={<Profile />} />
+        {/* Unknown Route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
