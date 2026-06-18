@@ -3,10 +3,12 @@ import {
   Building2,
   Bell,
   ChevronDown,
+  Plus,
 } from "lucide-react";
 
 function Navbar() {
   const userName = localStorage.getItem("name") || "User";
+  const userRole = localStorage.getItem("role");
 
   const firstLetter = userName.charAt(0).toUpperCase();
 
@@ -17,6 +19,7 @@ function Navbar() {
         <div className="h-20 flex items-center justify-between">
 
           {/* Logo */}
+
           <Link
             to="/home"
             className="flex items-center gap-3"
@@ -39,8 +42,10 @@ function Navbar() {
             </div>
           </Link>
 
-          {/* Center Navigation */}
-          <div className="hidden md:flex items-center gap-10">
+          {/* Navigation */}
+
+          <div className="hidden lg:flex items-center gap-10">
+
             <Link
               to="/home"
               className="font-medium text-slate-300 hover:text-teal-400 transition"
@@ -68,23 +73,39 @@ function Navbar() {
             >
               Inquiries
             </Link>
+
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center gap-5">
 
-            <button className="p-2 rounded-xl hover:bg-slate-800 transition">
+          <div className="flex items-center gap-4">
+
+            {/* List Property Button */}
+
+            <Link
+              to={userRole === "owner" ? "/owner" : "/login"}
+              className="hidden md:flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-teal-700 hover:shadow-lg"
+            >
+              <Plus size={18} />
+              List Your Property
+            </Link>
+
+            {/* Notification */}
+
+            <button className="rounded-xl p-2 hover:bg-slate-800 transition">
               <Bell
                 size={22}
                 className="text-slate-300"
               />
             </button>
 
+            {/* Profile */}
+
             <Link
               to="/profile"
-              className="flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition"
+              className="flex items-center gap-3 rounded-xl bg-slate-800 px-4 py-2 hover:bg-slate-700 transition"
             >
-              <div className="w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-600 font-semibold text-white">
                 {firstLetter}
               </div>
 
@@ -93,7 +114,7 @@ function Navbar() {
                   Hi,
                 </p>
 
-                <p className="text-white font-medium leading-none">
+                <p className="font-medium leading-none text-white">
                   {userName}
                 </p>
               </div>

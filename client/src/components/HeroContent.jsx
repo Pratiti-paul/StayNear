@@ -8,20 +8,15 @@ import {
 function HeroContent() {
   return (
     <>
-      {/* Heading */}
-      <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-extrabold leading-[1.15] text-[#0f172a] tracking-tight">
-        Find Your Perfect PG
-        <span className="block text-[#00a2c7] mt-3">
-          Near Your College
-        </span>
+      <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-extrabold leading-[1.08] text-[#147f97] tracking-tight">
+        <span className="block">Find Your Perfect PG</span>
+        <span className="block">Near Your College</span>
       </h1>
 
-      {/* Paragraph */}
       <p className="mt-6 text-[15px] sm:text-base lg:text-lg leading-relaxed text-slate-700 max-w-[420px] font-medium">
         Verified stays, trusted owners, and everything you need to find your next home away from home
       </p>
 
-      {/* Features Row */}
       <div className="flex flex-row flex-wrap items-start justify-start gap-4 sm:gap-6 lg:gap-8 mt-12">
         <Feature
           icon={<MapPin size={26} className="text-[#00a2c7] stroke-[1.5]" />}
