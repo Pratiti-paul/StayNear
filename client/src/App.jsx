@@ -26,11 +26,7 @@ function App() {
         {/* Seeker Home */}
         <Route
           path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
+          element={<Home />}
         />
 
         {/* Owner */}
