@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import heroBanner from "../assets/hero_banner.png";
 import StatsSection from "../components/StatsSection";
+import TestimonialsSection from "../components/TestimonialsSection";
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
         <img src={heroBanner} alt="Hero Banner" className="w-full object-cover" />
       </main>
       <StatsSection />
+      <TestimonialsSection />
       <Footer />
 
     </div>
