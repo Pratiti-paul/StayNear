@@ -3,6 +3,8 @@ import Footer from "../components/Footer";
 import heroBanner from "../assets/hero_banner.png";
 import StatsSection from "../components/StatsSection";
 import TestimonialsSection from "../components/TestimonialsSection";
+import FeaturesSection from "../components/FeaturesSection";
+import CategoriesSection from "../components/CategoriesSection";
 
 function Home() {
   return (
@@ -13,6 +15,8 @@ function Home() {
       <main className="flex-1">
         <img src={heroBanner} alt="Hero Banner" className="w-full object-cover" />
       </main>
+      <FeaturesSection />
+      <CategoriesSection />
       <StatsSection />
       <TestimonialsSection />
       <Footer />
