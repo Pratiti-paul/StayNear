@@ -1,11 +1,11 @@
 import Wishlist from "../models/Wishlist.js";
-import PG from "../models/PG.js";
+import Property from "../models/Property.js";
 
 export const getWishlist = async (req, res) => {
   try {
     const wishlist = await Wishlist.find({ user: req.user.id })
       .populate({
-        path: "pg",
+        path: "property",
         populate: { path: "owner", select: "name email phone" },
       });
 
@@ -21,23 +21,23 @@ export const getWishlist = async (req, res) => {
 
 export const addToWishlist = async (req, res) => {
   try {
-    const { pgId } = req.body;
+    const { propertyId } = req.body;
 
-    // Check if PG exists
-    const pg = await PG.findById(pgId);
-    if (!pg) {
-      return res.status(404).json({ message: "PG not found" });
+    // Check if Property exists
+    const property = await Property.findById(propertyId);
+    if (!property) {
+      return res.status(404).json({ message: "Property not found" });
     }
 
     // Check if already in wishlist
-    const existing = await Wishlist.findOne({ user: req.user.id, pg: pgId });
+    const existing = await Wishlist.findOne({ user: req.user.id, property: propertyId });
     if (existing) {
       return res.status(400).json({ message: "Already in wishlist" });
     }
 
     const wishlist = await Wishlist.create({
       user: req.user.id,
-      pg: pgId,
+      property: propertyId,
     });
 
     res.status(201).json({
@@ -51,11 +51,11 @@ export const addToWishlist = async (req, res) => {
 
 export const removeFromWishlist = async (req, res) => {
   try {
-    const { pgId } = req.params;
+    const { propertyId } = req.params;
 
     const wishlist = await Wishlist.findOneAndDelete({
       user: req.user.id,
-      pg: pgId,
+      property: propertyId,
     });
 
     if (!wishlist) {

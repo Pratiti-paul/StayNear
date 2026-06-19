@@ -7,9 +7,9 @@ const wishlistSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    pg: {
+    property: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "PG",
+      ref: "Property",
       required: true,
     },
     createdAt: {
@@ -20,7 +20,7 @@ const wishlistSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Ensure each user-PG combination is unique
-wishlistSchema.index({ user: 1, pg: 1 }, { unique: true });
+// Ensure each user-property combination is unique
+wishlistSchema.index({ user: 1, property: 1 }, { unique: true });
 
 export default mongoose.model("Wishlist", wishlistSchema);

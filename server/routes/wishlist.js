@@ -12,6 +12,6 @@ router.use(protect);
 
 router.get("/", getWishlist);
 router.post("/add", addToWishlist);
-router.delete("/:pgId", removeFromWishlist);
+router.delete("/:propertyId", removeFromWishlist);
 
 export default router;

@@ -1,12 +1,15 @@
 import Inquiry from "../models/Inquiry.js";
+import Property from "../models/Property.js";
 
 export const getInquiries = async (req, res) => {
   try {
     const filter = {};
 
-    // If owner, get inquiries for their PGs
+    // If owner, get inquiries for their properties
     if (req.user.role === "owner") {
-      filter["pg.owner"] = req.user.id;
+      const properties = await Property.find({ owner: req.user.id });
+      const propertyIds = properties.map((p) => p._id);
+      filter.property = { $in: propertyIds };
     } else {
       // If tenant, get their own inquiries
       filter.tenant = req.user.id;
@@ -15,8 +18,8 @@ export const getInquiries = async (req, res) => {
     const inquiries = await Inquiry.find(filter)
       .populate("tenant", "name email phone")
       .populate({
-        path: "pg",
-        populate: { path: "owner", select: "name email" },
+        path: "property",
+        populate: { path: "owner", select: "name email phone" },
       });
 
     res.status(200).json({
@@ -31,11 +34,16 @@ export const getInquiries = async (req, res) => {
 
 export const createInquiry = async (req, res) => {
   try {
-    const { pgId, message, moveInDate } = req.body;
+    const { propertyId, message, moveInDate } = req.body;
+
+    const property = await Property.findById(propertyId);
+    if (!property) {
+      return res.status(404).json({ message: "Property not found" });
+    }
 
     const inquiry = await Inquiry.create({
       tenant: req.user.id,
-      pg: pgId,
+      property: propertyId,
       message,
       moveInDate,
     });

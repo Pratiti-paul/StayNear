@@ -7,9 +7,9 @@ const inquirySchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    pg: {
+    property: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "PG",
+      ref: "Property",
       required: true,
     },
     message: {

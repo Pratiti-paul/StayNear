@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.js";
 import pgRoutes from "./routes/pg.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import inquiryRoutes from "./routes/inquiry.js";
+import propertyRoutes from "./routes/propertyRoutes.js";
 
 dotenv.config();
 
@@ -20,12 +21,14 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/pgs", pgRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/properties", propertyRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
