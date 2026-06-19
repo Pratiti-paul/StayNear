@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Building2,
   Bell,
@@ -7,19 +7,30 @@ import {
 } from "lucide-react";
 
 function Navbar() {
+  const navigate = useNavigate();
+
   const userName = localStorage.getItem("name") || "User";
   const userRole = localStorage.getItem("role");
 
   const firstLetter = userName.charAt(0).toUpperCase();
 
+  const handleLogout = () => {
+    const confirmLogout = window.confirm(
+      "Are you sure you want to logout?"
+    );
+
+    if (!confirmLogout) return;
+
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-slate-900 border-b border-slate-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-6">
-
         <div className="h-20 flex items-center justify-between">
 
           {/* Logo */}
-
           <Link
             to="/home"
             className="flex items-center gap-3"
@@ -43,9 +54,7 @@ function Navbar() {
           </Link>
 
           {/* Navigation */}
-
           <div className="hidden lg:flex items-center gap-10">
-
             <Link
               to="/home"
               className="font-medium text-slate-300 hover:text-teal-400 transition"
@@ -73,15 +82,12 @@ function Navbar() {
             >
               Inquiries
             </Link>
-
           </div>
 
           {/* Right Side */}
-
           <div className="flex items-center gap-4">
 
             {/* List Property Button */}
-
             <Link
               to={userRole === "owner" ? "/owner" : "/login"}
               className="hidden md:flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-teal-700 hover:shadow-lg"
@@ -91,7 +97,6 @@ function Navbar() {
             </Link>
 
             {/* Notification */}
-
             <button className="rounded-xl p-2 hover:bg-slate-800 transition">
               <Bell
                 size={22}
@@ -100,7 +105,6 @@ function Navbar() {
             </button>
 
             {/* Profile */}
-
             <Link
               to="/profile"
               className="flex items-center gap-3 rounded-xl bg-slate-800 px-4 py-2 hover:bg-slate-700 transition"
@@ -125,10 +129,17 @@ function Navbar() {
               />
             </Link>
 
+            {/* Logout Button */}
+            <button
+              onClick={handleLogout}
+              className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+
           </div>
 
         </div>
-
       </div>
     </nav>
   );
