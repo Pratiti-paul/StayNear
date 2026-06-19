@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import OwnerNavbar from "../components/OwnerNavbar";
 import {
   Plus,
   Home,
@@ -176,7 +176,7 @@ function Owner() {
   if (loading && view === "dashboard") {
     return (
       <div className="min-h-screen flex flex-col justify-between bg-slate-50">
-        <Navbar />
+        <OwnerNavbar />
         <div className="flex-grow flex items-center justify-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-700"></div>
         </div>
@@ -187,7 +187,7 @@ function Owner() {
 
   return (
     <>
-      <Navbar />
+      <OwnerNavbar />
 
       <main className="bg-slate-50 min-h-screen pt-28 pb-20">
         <div className="max-w-7xl mx-auto px-6">
