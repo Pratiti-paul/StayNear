@@ -10,6 +10,7 @@ import pgRoutes from "./routes/pg.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import inquiryRoutes from "./routes/inquiry.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/pgs", pgRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/properties", propertyRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

@@ -44,3 +44,13 @@ export const getInquiries = () => API.get("/inquiries");
 export const createInquiry = (inquiryData) => API.post("/inquiries", inquiryData);
 export const updateInquiryStatus = (id, status) =>
   API.patch(`/inquiries/${id}`, { status });
+
+// Admin Panel APIs
+export const getAdminStats = () => API.get("/admin/stats");
+export const getAdminUsers = () => API.get("/admin/users");
+export const getAdminProperties = () => API.get("/admin/properties");
+export const verifyAdminProperty = (id, verified) =>
+  API.put(`/admin/properties/${id}/verify`, { verified });
+export const deleteAdminProperty = (id) => API.delete(`/admin/properties/${id}`);
+export const deleteAdminUser = (id) => API.delete(`/admin/users/${id}`);
+export const updateAdminUserRole = (id, role) => API.put(`/admin/users/${id}/role`, { role });

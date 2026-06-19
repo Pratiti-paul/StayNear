@@ -1,86 +1,114 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import AdminSidebar from "../components/admin/AdminSidebar";
+import DashboardCards from "../components/admin/DashboardCards";
+import PropertyTable from "../components/admin/PropertyTable";
+import UserTable from "../components/admin/UserTable";
+import { X } from "lucide-react";
 import {
-  ShieldCheck,
-  ShieldAlert,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Star,
-  Users,
-  Home,
-  Clock,
-} from "lucide-react";
-import {
-  getProperties,
-  verifyProperty,
-  featureProperty,
-  deleteProperty,
+  getAdminStats,
+  getAdminUsers,
+  getAdminProperties,
+  verifyAdminProperty,
+  deleteAdminProperty,
+  deleteAdminUser,
+  updateAdminUserRole,
 } from "../services/propertyService";
 
 function Admin() {
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [stats, setStats] = useState({});
+  const [users, setUsers] = useState([]);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const fetchAdminData = async () => {
+  // Modal State
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      // Fetch all properties (passing no parameters or specific query params)
-      const res = await getProperties({});
-      setProperties(res.data.data);
+      setError("");
+
+      const statsRes = await getAdminStats();
+      setStats(statsRes.data.stats);
+
+      const usersRes = await getAdminUsers();
+      setUsers(usersRes.data.data);
+
+      const propRes = await getAdminProperties();
+      setProperties(propRes.data.data);
+
       setLoading(false);
     } catch (err) {
       console.error(err);
-      setError("Failed to fetch admin data. Ensure you are signed in as an Admin.");
+      setError("Failed to load administration data. Make sure you are logged in as Admin.");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAdminData();
+    fetchDashboardData();
   }, []);
 
-  const handleApprove = async (id) => {
+  const handleApproveProperty = async (id) => {
     try {
-      await verifyProperty(id, true);
-      alert("Property verified successfully.");
-      fetchAdminData();
+      await verifyAdminProperty(id, true);
+      alert("Property approved successfully.");
+      fetchDashboardData();
     } catch (err) {
-      alert("Failed to verify property.");
+      alert("Failed to approve property.");
     }
   };
 
-  const handleReject = async (id) => {
+  const handleRejectProperty = async (id) => {
     try {
-      await verifyProperty(id, false);
-      alert("Property unverified / rejected successfully.");
-      fetchAdminData();
+      await verifyAdminProperty(id, false);
+      alert("Property rejected successfully.");
+      fetchDashboardData();
     } catch (err) {
       alert("Failed to reject property.");
     }
   };
 
-  const handleToggleFeatured = async (id, currentFeatured) => {
+  const handleDeleteProperty = async (id) => {
+    if (!window.confirm("Are you sure you want to permanently delete this property listing?")) return;
     try {
-      await featureProperty(id, !currentFeatured);
-      alert(`Property ${!currentFeatured ? "marked as Featured" : "unfeatured"}.`);
-      fetchAdminData();
-    } catch (err) {
-      alert("Failed to toggle featured status.");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to permanently delete this listing?")) return;
-    try {
-      await deleteProperty(id);
-      alert("Property permanently deleted.");
-      fetchAdminData();
+      await deleteAdminProperty(id);
+      alert("Property deleted successfully.");
+      fetchDashboardData();
     } catch (err) {
       alert("Failed to delete property.");
     }
+  };
+
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm("Are you sure you want to permanently delete this user account?")) return;
+    try {
+      await deleteAdminUser(id);
+      alert("User deleted successfully.");
+      fetchDashboardData();
+    } catch (err) {
+      alert("Failed to delete user.");
+    }
+  };
+
+  const handleChangeUserRole = async (id, role) => {
+    try {
+      await updateAdminUserRole(id, role);
+      alert(`User role updated to ${role} successfully.`);
+      fetchDashboardData();
+    } catch (err) {
+      alert("Failed to update user role.");
+    }
+  };
+
+  const handleViewProperty = (prop) => {
+    setSelectedProperty(prop);
+    setShowModal(true);
   };
 
   if (loading) {
@@ -99,183 +127,210 @@ function Admin() {
     <>
       <Navbar />
 
-      <main className="bg-slate-50 min-h-screen pt-28 pb-20">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
-          <div className="mb-10">
-            <p className="uppercase tracking-[0.25em] text-sm font-semibold text-teal-700">
-              Administration Area
-            </p>
-            <h1 className="mt-3 text-5xl font-extrabold text-slate-900">
-              Admin Moderation
-            </h1>
-            <p className="mt-4 text-lg text-slate-600 max-w-3xl">
-              Moderate listings, approve verified property applications, and highlight featured properties.
-            </p>
-          </div>
+      <div className="flex bg-slate-50 pt-20">
+        <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
+        <main className="flex-grow p-8 max-w-[calc(100vw-256px)] overflow-x-hidden">
           {error ? (
-            <div className="bg-red-50 text-red-700 rounded-3xl p-10 text-center border border-red-200">
+            <div className="bg-red-50 text-red-700 rounded-3xl p-10 text-center border border-red-200 max-w-4xl mx-auto">
               {error}
             </div>
           ) : (
             <>
-              {/* Stats Cards */}
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-12">
-                <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex items-center gap-5">
-                  <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
-                    <Home size={26} />
-                  </div>
+              {activeTab === "dashboard" && (
+                <div className="space-y-6">
                   <div>
-                    <p className="text-sm font-semibold text-slate-400">TOTAL PROPERTIES</p>
-                    <p className="text-3xl font-extrabold text-slate-800 mt-1">
-                      {properties.length}
-                    </p>
+                    <h1 className="text-3xl font-extrabold text-slate-900">Admin Dashboard</h1>
+                    <p className="text-slate-500 text-sm mt-1">Platform overview metrics</p>
                   </div>
+                  <DashboardCards stats={stats} />
                 </div>
+              )}
 
-                <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex items-center gap-5">
-                  <div className="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
-                    <CheckCircle size={26} />
-                  </div>
+              {activeTab === "properties" && (
+                <div className="space-y-6">
                   <div>
-                    <p className="text-sm font-semibold text-slate-400">ACTIVE & VERIFIED</p>
-                    <p className="text-3xl font-extrabold text-slate-800 mt-1">
-                      {properties.filter((p) => p.verified).length}
-                    </p>
+                    <h1 className="text-3xl font-extrabold text-slate-900">Property Moderation</h1>
+                    <p className="text-slate-500 text-sm mt-1">Approve, reject, or delete properties</p>
                   </div>
+                  <PropertyTable
+                    properties={properties}
+                    onView={handleViewProperty}
+                    onApprove={handleApproveProperty}
+                    onReject={handleRejectProperty}
+                    onDelete={handleDeleteProperty}
+                  />
                 </div>
+              )}
 
-                <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex items-center gap-5">
-                  <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600">
-                    <Clock size={26} />
-                  </div>
+              {activeTab === "users" && (
+                <div className="space-y-6">
                   <div>
-                    <p className="text-sm font-semibold text-slate-400">PENDING APPROVALS</p>
-                    <p className="text-3xl font-extrabold text-slate-800 mt-1">
-                      {properties.filter((p) => !p.verified).length}
-                    </p>
+                    <h1 className="text-3xl font-extrabold text-slate-900">User Management</h1>
+                    <p className="text-slate-500 text-sm mt-1">Change user roles or delete accounts</p>
                   </div>
+                  <UserTable
+                    users={users}
+                    onDeleteUser={handleDeleteUser}
+                    onChangeRole={handleChangeUserRole}
+                  />
                 </div>
-              </div>
-
-              {/* Properties Moderation Table */}
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="p-8 border-b border-slate-100">
-                  <h2 className="text-2xl font-bold text-slate-900">Manage Listings</h2>
-                </div>
-
-                {properties.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-slate-50 border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                          <th className="px-8 py-5">Property Details</th>
-                          <th className="px-6 py-5">Owner</th>
-                          <th className="px-6 py-5">City</th>
-                          <th className="px-6 py-5">Status</th>
-                          <th className="px-6 py-5">Featured</th>
-                          <th className="px-8 py-5 text-right">Moderation Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {properties.map((prop) => (
-                          <tr key={prop._id} className="hover:bg-slate-50 transition">
-                            <td className="px-8 py-5">
-                              <div className="flex items-center gap-4">
-                                <img
-                                  src={
-                                    prop.images && prop.images.length > 0
-                                      ? `http://localhost:5002${prop.images[0]}`
-                                      : "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=80&q=80"
-                                  }
-                                  alt={prop.title}
-                                  className="w-12 h-12 rounded-xl object-cover"
-                                />
-                                <div>
-                                  <p className="font-bold text-slate-800 line-clamp-1">
-                                    {prop.title}
-                                  </p>
-                                  <p className="text-xs text-slate-400 font-medium">
-                                    {prop.location}
-                                  </p>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-5">
-                              <p className="font-semibold text-slate-700">
-                                {prop.owner ? prop.owner.name : "Unknown Owner"}
-                              </p>
-                              <p className="text-xs text-slate-400">
-                                {prop.owner ? prop.owner.email : ""}
-                              </p>
-                            </td>
-                            <td className="px-6 py-5 font-semibold text-slate-600">
-                              {prop.city || "N/A"}
-                            </td>
-                            <td className="px-6 py-5">
-                              {prop.verified ? (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-100">
-                                  <ShieldCheck size={14} /> Verified
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 border border-amber-100">
-                                  <ShieldAlert size={14} /> Pending
-                                </span>
-                              )}
-                            </td>
-                            <td className="px-6 py-5">
-                              <button
-                                onClick={() => handleToggleFeatured(prop._id, prop.featured)}
-                                className={`p-2 rounded-full transition cursor-pointer ${
-                                  prop.featured
-                                    ? "text-yellow-500 hover:bg-yellow-50"
-                                    : "text-slate-300 hover:bg-slate-100"
-                                }`}
-                                title={prop.featured ? "Unfeature" : "Feature"}
-                              >
-                                <Star size={20} className={prop.featured ? "fill-yellow-500" : ""} />
-                              </button>
-                            </td>
-                            <td className="px-8 py-5 text-right space-x-2 whitespace-nowrap">
-                              {prop.verified ? (
-                                <button
-                                  onClick={() => handleReject(prop._id)}
-                                  className="bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold px-4 py-2 rounded-lg text-xs transition cursor-pointer"
-                                >
-                                  Reject
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => handleApprove(prop._id)}
-                                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition shadow shadow-emerald-600/10 cursor-pointer"
-                                >
-                                  Approve
-                                </button>
-                              )}
-                              <button
-                                onClick={() => handleDelete(prop._id)}
-                                className="bg-red-50 hover:bg-red-100 text-red-600 p-2.5 rounded-lg transition inline-flex items-center justify-center cursor-pointer"
-                                title="Delete Listing"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <div className="p-20 text-center text-slate-500 font-medium">
-                    No listed properties on StayNear yet.
-                  </div>
-                )}
-              </div>
+              )}
             </>
           )}
+        </main>
+      </div>
+
+      {/* Property Details Modal */}
+      {showModal && selectedProperty && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-3xl max-h-[85vh] overflow-y-auto p-8 relative shadow-2xl">
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setSelectedProperty(null);
+              }}
+              className="absolute right-6 top-6 text-slate-400 hover:text-slate-650 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+
+            <h2 className="text-3xl font-extrabold text-slate-900 mb-6 border-b border-slate-100 pb-4 pr-10">
+              {selectedProperty.title}
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-8 text-sm text-slate-600">
+              <div>
+                <h3 className="font-bold text-slate-800 mb-3 text-base">Key Specs</h3>
+                <div className="space-y-2.5">
+                  <p>
+                    <span className="font-bold text-slate-700">Type:</span>{" "}
+                    {selectedProperty.propertyType}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Gender suitability:</span>{" "}
+                    {selectedProperty.gender}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Price (Rent):</span> ₹
+                    {selectedProperty.price} / month
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Security Deposit:</span> ₹
+                    {selectedProperty.securityDeposit}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Room Type:</span>{" "}
+                    {selectedProperty.roomType}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Available Beds:</span>{" "}
+                    {selectedProperty.availableBeds}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Verification Status:</span>{" "}
+                    {selectedProperty.verified ? "Approved" : "Pending"}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Featured Status:</span>{" "}
+                    {selectedProperty.featured ? "Yes" : "No"}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-bold text-slate-800 mb-3 text-base">Location & College Details</h3>
+                <div className="space-y-2.5">
+                  <p>
+                    <span className="font-bold text-slate-700">Address:</span>{" "}
+                    {selectedProperty.location}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">City:</span> {selectedProperty.city}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">State:</span>{" "}
+                    {selectedProperty.state}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Pincode:</span>{" "}
+                    {selectedProperty.pincode}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Nearby College:</span>{" "}
+                    {selectedProperty.nearbyCollege}
+                  </p>
+                  <p>
+                    <span className="font-bold text-slate-700">Distance from College:</span>{" "}
+                    {selectedProperty.distanceFromCollege}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 border-t border-slate-100 pt-6">
+              <h3 className="font-bold text-slate-800 mb-2 text-base">Description</h3>
+              <p className="text-slate-600 leading-relaxed">{selectedProperty.description}</p>
+            </div>
+
+            <div className="mt-8 border-t border-slate-100 pt-6">
+              <h3 className="font-bold text-slate-800 mb-3 text-base">Amenities</h3>
+              <div className="flex flex-wrap gap-2">
+                {selectedProperty.amenities?.map((amenity, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-teal-50 text-teal-700 font-semibold px-3.5 py-2 rounded-full text-xs border border-teal-100"
+                  >
+                    {amenity}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {selectedProperty.owner && (
+              <div className="mt-8 border-t border-slate-100 pt-6 bg-slate-50 p-6 rounded-2xl border border-slate-150">
+                <h3 className="font-bold text-slate-800 mb-3 text-base">Owner Information</h3>
+                <div className="grid md:grid-cols-3 gap-4 text-xs font-semibold text-slate-600">
+                  <p>
+                    <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                      NAME
+                    </span>{" "}
+                    {selectedProperty.owner.name}
+                  </p>
+                  <p>
+                    <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                      EMAIL
+                    </span>{" "}
+                    {selectedProperty.owner.email}
+                  </p>
+                  <p>
+                    <span className="text-slate-400 font-bold uppercase tracking-wider block mb-1">
+                      PHONE
+                    </span>{" "}
+                    {selectedProperty.owner.phone || "N/A"}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {selectedProperty.images && selectedProperty.images.length > 0 && (
+              <div className="mt-8 border-t border-slate-100 pt-6">
+                <h3 className="font-bold text-slate-800 mb-4 text-base">Property Gallery</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {selectedProperty.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img.startsWith("http") ? img : `http://localhost:5002${img}`}
+                      alt={`gallery-${idx}`}
+                      className="w-full h-40 object-cover rounded-xl border border-slate-200"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </main>
+      )}
 
       <Footer />
     </>
