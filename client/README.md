@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <h1>🏠 StayNear</h1>
+    <h1>StayNear</h1>
 
     <p>
         <strong>StayNear</strong> is a full-stack accommodation discovery platform
