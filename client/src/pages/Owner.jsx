@@ -293,11 +293,12 @@ function Owner() {
                                       <p className="font-bold text-slate-800 line-clamp-1">
                                         {prop.title}
                                       </p>
+
                                       <p className="text-xs text-slate-400 font-medium">
-                                        {prop.location}
+                                        {prop.city}, {prop.state}
                                       </p>
                                     </div>
-                                  </div>
+                                   </div>
                                 </td>
                                 <td className="px-6 py-5 font-semibold text-slate-600">
                                   {prop.propertyType}
