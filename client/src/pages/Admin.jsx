@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import AdminNavbar from "../components/admin/AdminNavbar";
 import Footer from "../components/Footer";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import DashboardCards from "../components/admin/DashboardCards";
+import QuickActions from "../components/admin/QuickActions";
+import PendingProperties from "../components/admin/PendingProperties";
+import RecentUsers from "../components/admin/RecentUsers";
 import PropertyTable from "../components/admin/PropertyTable";
 import UserTable from "../components/admin/UserTable";
-import { X } from "lucide-react";
+import { Check, Trash2, X } from "lucide-react";
 import {
   getAdminStats,
   getAdminUsers,
@@ -59,8 +62,10 @@ function Admin() {
       await verifyAdminProperty(id, true);
       alert("Property approved successfully.");
       fetchDashboardData();
+      return true;
     } catch (err) {
       alert("Failed to approve property.");
+      return false;
     }
   };
 
@@ -69,8 +74,10 @@ function Admin() {
       await verifyAdminProperty(id, false);
       alert("Property rejected successfully.");
       fetchDashboardData();
+      return true;
     } catch (err) {
       alert("Failed to reject property.");
+      return false;
     }
   };
 
@@ -80,8 +87,10 @@ function Admin() {
       await deleteAdminProperty(id);
       alert("Property deleted successfully.");
       fetchDashboardData();
+      return true;
     } catch (err) {
       alert("Failed to delete property.");
+      return false;
     }
   };
 
@@ -111,10 +120,36 @@ function Admin() {
     setShowModal(true);
   };
 
+  const handleClosePropertyModal = () => {
+    setShowModal(false);
+    setSelectedProperty(null);
+  };
+
+  const handleModalApprove = async () => {
+    const success = await handleApproveProperty(selectedProperty._id);
+    if (success) {
+      handleClosePropertyModal();
+    }
+  };
+
+  const handleModalReject = async () => {
+    const success = await handleRejectProperty(selectedProperty._id);
+    if (success) {
+      handleClosePropertyModal();
+    }
+  };
+
+  const handleModalDelete = async () => {
+    const success = await handleDeleteProperty(selectedProperty._id);
+    if (success) {
+      handleClosePropertyModal();
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col justify-between bg-slate-50">
-        <Navbar />
+        <AdminNavbar />
         <div className="flex-grow flex items-center justify-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-700"></div>
         </div>
@@ -125,9 +160,9 @@ function Admin() {
 
   return (
     <>
-      <Navbar />
+      <AdminNavbar />
 
-      <div className="flex bg-slate-50 pt-20">
+      <div className="flex min-h-screen bg-slate-50">
         <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <main className="flex-grow p-8 max-w-[calc(100vw-256px)] overflow-x-hidden">
@@ -138,12 +173,36 @@ function Admin() {
           ) : (
             <>
               {activeTab === "dashboard" && (
-                <div className="space-y-6">
-                  <div>
-                    <h1 className="text-3xl font-extrabold text-slate-900">Admin Dashboard</h1>
-                    <p className="text-slate-500 text-sm mt-1">Platform overview metrics</p>
+                <div className="space-y-8">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <h1 className="text-3xl font-extrabold text-slate-900">
+                        Welcome back, Admin 👋
+                      </h1>
+                      <p className="text-slate-500 text-sm mt-1">
+                        Here's what's happening on StayNear today.
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={fetchDashboardData}
+                      className="inline-flex items-center justify-center rounded-2xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-teal-700"
+                    >
+                      Refresh Dashboard
+                    </button>
                   </div>
+
                   <DashboardCards stats={stats} />
+
+                  <QuickActions pending={stats.pendingProperties} setActiveTab={setActiveTab} />
+
+                  <PendingProperties
+                    properties={properties}
+                    onView={handleViewProperty}
+                    setActiveTab={setActiveTab}
+                  />
+
+                  <RecentUsers users={users} />
                 </div>
               )}
 
@@ -186,10 +245,7 @@ function Admin() {
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-3xl max-h-[85vh] overflow-y-auto p-8 relative shadow-2xl">
             <button
-              onClick={() => {
-                setShowModal(false);
-                setSelectedProperty(null);
-              }}
+              onClick={handleClosePropertyModal}
               className="absolute right-6 top-6 text-slate-400 hover:text-slate-650 bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition cursor-pointer"
             >
               <X size={20} />
@@ -328,6 +384,43 @@ function Admin() {
                 </div>
               </div>
             )}
+
+            <div className="mt-8 border-t border-slate-100 pt-6">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-end gap-3">
+                {selectedProperty.verified ? (
+                  <button
+                    onClick={handleModalReject}
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-amber-700"
+                  >
+                    <X size={18} />
+                    Reject Approval
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleModalApprove}
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                  >
+                    <Check size={18} />
+                    Approve Property
+                  </button>
+                )}
+
+                <button
+                  onClick={handleModalDelete}
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-red-200 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                >
+                  <Trash2 size={18} />
+                  Delete Property
+                </button>
+
+                <button
+                  onClick={handleClosePropertyModal}
+                  className="inline-flex items-center justify-center rounded-2xl bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

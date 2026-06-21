@@ -4,15 +4,21 @@ function PropertyTable({ properties, onView, onApprove, onReject, onDelete }) {
   const getImageUrl = (images) => {
     if (images && images.length > 0) {
       const img = images[0];
-      return img.startsWith("http") ? img : `http://localhost:5002${img}`;
+      return img.startsWith("http")
+        ? img
+        : `http://localhost:5002${img}`;
     }
+
     return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=80&q=80";
   };
 
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-slate-900">Property Listings</h2>
+        <h2 className="text-xl font-bold text-slate-900">
+          Property Listings
+        </h2>
+
         <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full">
           Total: {properties.length} Listings
         </span>
@@ -31,9 +37,14 @@ function PropertyTable({ properties, onView, onApprove, onReject, onDelete }) {
                 <th className="px-8 py-5 text-right">Actions</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-slate-100 text-sm">
               {properties.map((prop) => (
-                <tr key={prop._id} className="hover:bg-slate-50/50 transition">
+                <tr
+                  key={prop._id}
+                  className="hover:bg-slate-50/50 transition"
+                >
+                  {/* Property */}
                   <td className="px-8 py-4">
                     <div className="flex items-center gap-4">
                       <img
@@ -41,37 +52,58 @@ function PropertyTable({ properties, onView, onApprove, onReject, onDelete }) {
                         alt={prop.title}
                         className="w-12 h-12 rounded-xl object-cover border border-slate-150 shrink-0"
                       />
+
                       <div className="min-w-0">
-                        <p className="font-bold text-slate-800 truncate max-w-[200px]">
+                        <p className="font-bold text-slate-800 truncate max-w-[220px]">
                           {prop.title}
                         </p>
-                        <p className="text-xs text-slate-400 truncate max-w-[200px]">
-                          {prop.location}
+
+                        <p className="text-xs text-slate-400 truncate max-w-[220px]">
+                          {[prop.city, prop.state]
+                            .filter(Boolean)
+                            .join(", ")}
                         </p>
                       </div>
                     </div>
                   </td>
+
+                  {/* Owner */}
                   <td className="px-6 py-4">
                     <p className="font-semibold text-slate-700">
                       {prop.owner ? prop.owner.name : "Unknown"}
                     </p>
+
                     <p className="text-xs text-slate-400">
                       {prop.owner ? prop.owner.email : ""}
                     </p>
                   </td>
-                  <td className="px-6 py-4 font-semibold text-slate-600">{prop.city}</td>
-                  <td className="px-6 py-4 font-bold text-teal-700">₹{prop.price}</td>
+
+                  {/* City */}
+                  <td className="px-6 py-4 font-semibold text-slate-600">
+                    {prop.city}
+                  </td>
+
+                  {/* Price */}
+                  <td className="px-6 py-4 font-bold text-teal-700">
+                    ₹{prop.price}
+                  </td>
+
+                  {/* Verification */}
                   <td className="px-6 py-4">
                     {prop.verified ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-100">
-                        <ShieldCheck size={14} /> Approved
+                        <ShieldCheck size={14} />
+                        Approved
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700 border border-amber-100">
-                        <ShieldAlert size={14} /> Pending
+                        <ShieldAlert size={14} />
+                        Pending
                       </span>
                     )}
                   </td>
+
+                  {/* Actions */}
                   <td className="px-8 py-4 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-2">
                       <button

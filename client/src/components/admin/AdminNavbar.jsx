@@ -3,35 +3,35 @@ import { useState, useRef, useEffect } from "react";
 import {
   Building2,
   ChevronDown,
-  User,
+  LayoutDashboard,
   LogOut,
 } from "lucide-react";
 
-function OwnerNavbar() {
+function AdminNavbar() {
   const navigate = useNavigate();
 
-  const ownerName = localStorage.getItem("name") || "Owner";
-  const firstLetter = ownerName.charAt(0).toUpperCase();
+  const adminName = localStorage.getItem("name") || "Admin";
+  const firstLetter = adminName.charAt(0).toUpperCase();
 
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm(
+    const confirm = window.confirm(
       "Are you sure you want to logout?"
     );
 
-    if (!confirmLogout) return;
+    if (!confirm) return;
 
     localStorage.clear();
     navigate("/");
   };
 
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside(e) {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
+        !dropdownRef.current.contains(e.target)
       ) {
         setOpen(false);
       }
@@ -52,7 +52,7 @@ function OwnerNavbar() {
 
         {/* Logo */}
         <Link
-          to="/owner"
+          to="/admin"
           className="flex items-center gap-3"
         >
           <div className="w-11 h-11 rounded-xl bg-teal-600 flex items-center justify-center">
@@ -68,12 +68,12 @@ function OwnerNavbar() {
             </h1>
 
             <p className="text-xs text-slate-500">
-              Owner Dashboard
+              Admin Panel
             </p>
           </div>
         </Link>
 
-        {/* Profile Dropdown */}
+        {/* Profile */}
         <div
           className="relative"
           ref={dropdownRef}
@@ -88,17 +88,17 @@ function OwnerNavbar() {
 
             <div className="hidden md:block text-left">
               <p className="text-xs text-slate-500">
-                Welcome
+                Admin
               </p>
 
               <p className="font-semibold text-slate-800">
-                {ownerName}
+                {adminName}
               </p>
             </div>
 
             <ChevronDown
               size={18}
-              className={`text-slate-500 transition-transform ${
+              className={`text-slate-500 transition ${
                 open ? "rotate-180" : ""
               }`}
             />
@@ -107,6 +107,22 @@ function OwnerNavbar() {
           {open && (
             <div className="absolute right-0 mt-3 w-56 rounded-2xl bg-white border border-slate-200 shadow-xl overflow-hidden">
 
+              <button
+                onClick={() => {
+                  navigate("/admin");
+                  setOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-5 py-4 hover:bg-slate-50 transition"
+              >
+                <LayoutDashboard
+                  size={18}
+                  className="text-slate-500"
+                />
+
+                <span className="font-medium text-slate-700">
+                  Dashboard
+                </span>
+              </button>
 
               <button
                 onClick={handleLogout}
@@ -128,4 +144,4 @@ function OwnerNavbar() {
   );
 }
 
-export default OwnerNavbar;
+export default AdminNavbar;
