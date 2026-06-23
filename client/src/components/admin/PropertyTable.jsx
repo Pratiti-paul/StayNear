@@ -1,6 +1,6 @@
-import { ShieldCheck, ShieldAlert, Trash2, Eye, Check, X } from "lucide-react";
+import { ShieldCheck, ShieldAlert, Eye } from "lucide-react";
 
-function PropertyTable({ properties, onView, onApprove, onReject, onDelete }) {
+function PropertyTable({ properties, onView }) {
   const getImageUrl = (images) => {
     if (images && images.length > 0) {
       const img = images[0];
@@ -112,32 +112,6 @@ function PropertyTable({ properties, onView, onApprove, onReject, onDelete }) {
                         title="View Details"
                       >
                         <Eye size={18} />
-                      </button>
-
-                      {prop.verified ? (
-                        <button
-                          onClick={() => onReject(prop._id)}
-                          className="p-2 text-slate-500 hover:text-amber-600 hover:bg-slate-100 rounded-lg transition cursor-pointer"
-                          title="Reject / Suspend"
-                        >
-                          <X size={18} />
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => onApprove(prop._id)}
-                          className="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-100 rounded-lg transition cursor-pointer"
-                          title="Approve"
-                        >
-                          <Check size={18} />
-                        </button>
-                      )}
-
-                      <button
-                        onClick={() => onDelete(prop._id)}
-                        className="p-2 text-slate-500 hover:text-red-600 hover:bg-slate-100 rounded-lg transition cursor-pointer"
-                        title="Delete Permanently"
-                      >
-                        <Trash2 size={18} />
                       </button>
                     </div>
                   </td>

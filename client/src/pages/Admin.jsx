@@ -215,9 +215,6 @@ function Admin() {
                   <PropertyTable
                     properties={properties}
                     onView={handleViewProperty}
-                    onApprove={handleApproveProperty}
-                    onReject={handleRejectProperty}
-                    onDelete={handleDeleteProperty}
                   />
                 </div>
               )}
@@ -386,6 +383,8 @@ function Admin() {
             )}
 
             <div className="mt-8 border-t border-slate-100 pt-6">
+              <h3 className="font-bold text-slate-800 mb-4 text-base">Actions</h3>
+
               <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-end gap-3">
                 {selectedProperty.verified ? (
                   <button
