@@ -9,81 +9,87 @@ function FilterSidebar({
   setMaxPrice,
   onClear,
 }) {
-  const propertyTypes = ["Girls PG", "Boys PG", "Hostel", "Shared Flat"];
-  const genders = ["Girls", "Boys", "Co-ed"];
-
   return (
-    <aside className="sticky top-28 bg-white rounded-3xl shadow-md border border-slate-200 p-6 h-fit">
+    <aside className="sticky top-28 bg-white rounded-3xl border border-slate-200 shadow-md p-6 h-fit">
+
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal size={20} className="text-teal-600" />
-          <h2 className="text-xl font-bold text-slate-900">Filters</h2>
+          <SlidersHorizontal
+            size={20}
+            className="text-teal-600"
+          />
+          <h2 className="text-xl font-bold text-slate-900">
+            Filters
+          </h2>
         </div>
 
         <button
           onClick={onClear}
-          className="text-sm text-teal-700 hover:text-teal-800 font-semibold cursor-pointer"
+          className="text-sm font-semibold text-teal-600 hover:text-teal-700 cursor-pointer"
         >
           Clear All
         </button>
       </div>
 
-      {/* Rent */}
-      <div className="mt-8">
-        <h3 className="font-semibold text-slate-900 mb-4">Max Monthly Rent: ₹{maxPrice}</h3>
-        <input
-          type="range"
-          min="3000"
-          max="25000"
-          step="500"
+      {/* Budget */}
+      <div className="mb-6">
+        <label className="block text-sm font-semibold text-slate-700 mb-2">
+          Monthly Budget
+        </label>
+
+        <select
           value={maxPrice}
           onChange={(e) => setMaxPrice(Number(e.target.value))}
-          className="w-full accent-teal-600 cursor-pointer"
-        />
-        <div className="flex justify-between mt-3 text-sm text-slate-500">
-          <span>₹3,000</span>
-          <span>₹25,000</span>
-        </div>
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none cursor-pointer"
+        >
+          <option value={3000}>₹3,000</option>
+          <option value={5000}>Up to ₹5,000</option>
+          <option value={8000}>Up to ₹8,000</option>
+          <option value={10000}>Up to ₹10,000</option>
+          <option value={15000}>Up to ₹15,000</option>
+          <option value={20000}>Up to ₹20,000</option>
+          <option value={25000}>Up to ₹25,000</option>
+        </select>
       </div>
 
       {/* Property Type */}
-      <div className="mt-8">
-        <h3 className="font-semibold text-slate-900 mb-4">Property Type</h3>
-        <div className="space-y-3">
-          {propertyTypes.map((type) => (
-            <label key={type} className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="propertyType"
-                checked={propertyType === type}
-                onChange={() => setPropertyType(type)}
-                className="accent-teal-600 w-4 h-4 cursor-pointer"
-              />
-              <span className="text-slate-700">{type}</span>
-            </label>
-          ))}
-        </div>
+      <div className="mb-6">
+        <label className="block text-sm font-semibold text-slate-700 mb-2">
+          Property Type
+        </label>
+
+        <select
+          value={propertyType}
+          onChange={(e) => setPropertyType(e.target.value)}
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none cursor-pointer"
+        >
+          <option value="">All Types</option>
+          <option value="Girls PG">Girls PG</option>
+          <option value="Boys PG">Boys PG</option>
+          <option value="Hostel">Hostel</option>
+          <option value="Shared Flat">Shared Flat</option>
+        </select>
       </div>
 
       {/* Gender */}
-      <div className="mt-8">
-        <h3 className="font-semibold text-slate-900 mb-4">Gender</h3>
-        <div className="space-y-3">
-          {genders.map((item) => (
-            <label key={item} className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                name="gender"
-                checked={gender === item}
-                onChange={() => setGender(item)}
-                className="accent-teal-600 cursor-pointer"
-              />
-              <span className="text-slate-700">{item}</span>
-            </label>
-          ))}
-        </div>
+      <div>
+        <label className="block text-sm font-semibold text-slate-700 mb-2">
+          Gender
+        </label>
+
+        <select
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          className="w-full rounded-xl border border-slate-300 px-4 py-3 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none cursor-pointer"
+        >
+          <option value="">All</option>
+          <option value="Girls">Girls</option>
+          <option value="Boys">Boys</option>
+          <option value="Co-ed">Co-ed</option>
+        </select>
       </div>
+
     </aside>
   );
 }

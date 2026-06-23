@@ -92,9 +92,21 @@ function PropertyCard({ property, isWishlisted, onWishlistRemoved }) {
         </h3>
 
         {/* Location */}
-        <div className="mt-3 flex items-center gap-2 text-slate-600">
-          <MapPin size={17} />
-          <span className="line-clamp-1">{property.location}</span>
+        <div className="mt-3">
+          <div className="flex items-center gap-2 text-slate-600">
+            <MapPin size={17} className="shrink-0" />
+            <span className="line-clamp-1">
+              {property.location}
+            </span>
+          </div>
+
+          <p className="ml-6 mt-1 text-sm text-slate-500">
+            {[property.city, property.state]
+              .filter(Boolean)
+              .join(", ")}
+            {property.nearbyCollege &&
+              ` • Near ${property.nearbyCollege}`}
+          </p>
         </div>
 
         {/* Price */}
