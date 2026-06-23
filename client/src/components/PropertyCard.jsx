@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import {
   Heart,
   MapPin,
-  Star,
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
@@ -96,17 +95,6 @@ function PropertyCard({ property, isWishlisted, onWishlistRemoved }) {
         <div className="mt-3 flex items-center gap-2 text-slate-600">
           <MapPin size={17} />
           <span className="line-clamp-1">{property.location}</span>
-        </div>
-
-        {/* Rating */}
-        <div className="mt-4 flex items-center gap-2">
-          <Star size={18} className="fill-yellow-400 text-yellow-400" />
-          <span className="font-semibold text-slate-900">
-            {property.rating ? property.rating.toFixed(1) : "0.0"}
-          </span>
-          <span className="text-slate-500">
-            ({property.reviewCount || 0} Reviews)
-          </span>
         </div>
 
         {/* Price */}
