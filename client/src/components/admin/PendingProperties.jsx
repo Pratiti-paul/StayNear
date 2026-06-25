@@ -55,7 +55,7 @@ function PendingProperties({ properties, onView, setActiveTab }) {
                     property.images?.length > 0
                       ? property.images[0].startsWith("http")
                         ? property.images[0]
-                        : `http://localhost:5002${property.images[0]}`
+                        : `${import.meta.env.VITE_API_URL.replace("/api", "")}${property.images[0]}`
                       : "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=300"
                   }
                   alt={property.title}

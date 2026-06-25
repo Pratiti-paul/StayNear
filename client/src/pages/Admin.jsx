@@ -382,7 +382,7 @@ function Admin() {
                   {selectedProperty.images.map((img, idx) => (
                     <img
                       key={idx}
-                      src={img.startsWith("http") ? img : `http://localhost:5002${img}`}
+                      src={img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`}
                       alt={`gallery-${idx}`}
                       className="w-full h-40 object-cover rounded-xl border border-slate-200"
                     />

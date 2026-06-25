@@ -6,7 +6,7 @@ function PropertyTable({ properties, onView }) {
       const img = images[0];
       return img.startsWith("http")
         ? img
-        : `http://localhost:5002${img}`;
+        : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
     }
 
     return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=80&q=80";

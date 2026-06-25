@@ -290,7 +290,7 @@ function Owner() {
                                     <img
                                       src={
                                         prop.images && prop.images.length > 0
-                                          ? `http://localhost:5002${prop.images[0]}`
+                                          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${prop.images[0]}`
                                           : "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=80&q=80"
                                       }
                                       alt={prop.title}

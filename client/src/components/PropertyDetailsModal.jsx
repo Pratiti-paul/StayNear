@@ -82,7 +82,7 @@ function PropertyDetailsModal({ property, onClose, isWishlistedInitially, onWish
     if (!img) {
       return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80";
     }
-    return img.startsWith("http") ? img : `http://localhost:5002${img}`;
+    return img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
   };
 
   if (!property) return null;
