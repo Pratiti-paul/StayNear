@@ -6,6 +6,7 @@ import {
   User,
   LogOut,
 } from "lucide-react";
+import { toast } from "sonner";
 
 function OwnerNavbar() {
   const navigate = useNavigate();
@@ -17,14 +18,16 @@ function OwnerNavbar() {
   const dropdownRef = useRef(null);
 
   const handleLogout = () => {
-    const confirmLogout = window.confirm(
-      "Are you sure you want to logout?"
-    );
-
-    if (!confirmLogout) return;
-
-    localStorage.clear();
-    navigate("/");
+    toast("Are you sure you want to logout?", {
+      action: {
+        label: "Logout",
+        onClick: () => {
+          localStorage.clear();
+          toast.success("Logged out successfully");
+          navigate("/");
+        },
+      },
+    });
   };
 
   useEffect(() => {
