@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "sonner";
 
 function Register() {
   const navigate = useNavigate();
@@ -21,11 +22,11 @@ function Register() {
         formData
       );
 
-      alert("Registration Successful");
+      toast.success("Registration Successful! Please login.");
 
       navigate("/");
     } catch (error) {
-      alert(
+      toast.error(
         error.response?.data?.message ||
         "Registration Failed"
       );

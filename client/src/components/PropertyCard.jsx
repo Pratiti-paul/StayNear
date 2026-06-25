@@ -7,6 +7,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { addToWishlist, removeFromWishlist } from "../services/propertyService";
+import { toast } from "sonner";
 
 function PropertyCard({ property, isWishlisted, onWishlistRemoved, onViewDetails }) {
   const [liked, setLiked] = useState(isWishlisted || false);
@@ -24,12 +25,14 @@ function PropertyCard({ property, isWishlisted, onWishlistRemoved, onViewDetails
         await removeFromWishlist(property._id);
         setLiked(false);
         if (onWishlistRemoved) onWishlistRemoved(property._id);
+        toast.success("Removed from wishlist");
       } else {
         await addToWishlist(property._id);
         setLiked(true);
+        toast.success("Added to wishlist");
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Please login to manage wishlist");
+      toast.error(err.response?.data?.message || "Please login to manage wishlist");
     }
   };
 

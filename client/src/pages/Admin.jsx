@@ -18,6 +18,7 @@ import {
   deleteAdminUser,
   updateAdminUserRole,
 } from "../services/propertyService";
+import { toast } from "sonner";
 
 function Admin() {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -60,11 +61,11 @@ function Admin() {
   const handleApproveProperty = async (id) => {
     try {
       await verifyAdminProperty(id, true);
-      alert("Property approved successfully.");
+      toast.success("Property approved successfully.");
       fetchDashboardData();
       return true;
     } catch (err) {
-      alert("Failed to approve property.");
+      toast.error("Failed to approve property.");
       return false;
     }
   };
@@ -72,46 +73,57 @@ function Admin() {
   const handleRejectProperty = async (id) => {
     try {
       await verifyAdminProperty(id, false);
-      alert("Property rejected successfully.");
+      toast.success("Property rejected successfully.");
       fetchDashboardData();
       return true;
     } catch (err) {
-      alert("Failed to reject property.");
+      toast.error("Failed to reject property.");
       return false;
     }
   };
 
-  const handleDeleteProperty = async (id) => {
-    if (!window.confirm("Are you sure you want to permanently delete this property listing?")) return;
-    try {
-      await deleteAdminProperty(id);
-      alert("Property deleted successfully.");
-      fetchDashboardData();
-      return true;
-    } catch (err) {
-      alert("Failed to delete property.");
-      return false;
-    }
+  const handleDeleteProperty = (id) => {
+    toast("Are you sure you want to permanently delete this property listing?", {
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await deleteAdminProperty(id);
+            toast.success("Property deleted successfully.");
+            fetchDashboardData();
+            handleClosePropertyModal();
+          } catch (err) {
+            toast.error("Failed to delete property.");
+          }
+        }
+      }
+    });
   };
 
-  const handleDeleteUser = async (id) => {
-    if (!window.confirm("Are you sure you want to permanently delete this user account?")) return;
-    try {
-      await deleteAdminUser(id);
-      alert("User deleted successfully.");
-      fetchDashboardData();
-    } catch (err) {
-      alert("Failed to delete user.");
-    }
+  const handleDeleteUser = (id) => {
+    toast("Are you sure you want to permanently delete this user account?", {
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await deleteAdminUser(id);
+            toast.success("User deleted successfully.");
+            fetchDashboardData();
+          } catch (err) {
+            toast.error("Failed to delete user.");
+          }
+        }
+      }
+    });
   };
 
   const handleChangeUserRole = async (id, role) => {
     try {
       await updateAdminUserRole(id, role);
-      alert(`User role updated to ${role} successfully.`);
+      toast.success(`User role updated to ${role} successfully.`);
       fetchDashboardData();
     } catch (err) {
-      alert("Failed to update user role.");
+      toast.error("Failed to update user role.");
     }
   };
 
@@ -139,11 +151,8 @@ function Admin() {
     }
   };
 
-  const handleModalDelete = async () => {
-    const success = await handleDeleteProperty(selectedProperty._id);
-    if (success) {
-      handleClosePropertyModal();
-    }
+  const handleModalDelete = () => {
+    handleDeleteProperty(selectedProperty._id);
   };
 
   if (loading) {

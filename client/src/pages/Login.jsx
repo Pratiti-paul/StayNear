@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "sonner";
 
 function Login() {
   const navigate = useNavigate();
@@ -25,12 +26,13 @@ function Login() {
       localStorage.setItem("name", res.data.user.name);
 
       const role = res.data.user.role;
+      toast.success(`Welcome back, ${res.data.user.name || "User"}!`);
 
       if (role === "seeker") navigate("/home");
       else if (role === "owner") navigate("/owner");
       else if (role === "admin") navigate("/admin");
     } catch (error) {
-      alert(error.response?.data?.message || "Login Failed");
+      toast.error(error.response?.data?.message || "Login Failed");
     }
   };
 

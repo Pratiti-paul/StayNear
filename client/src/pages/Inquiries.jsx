@@ -6,6 +6,7 @@ import InquiryCard from "../components/InquiryCard";
 import InquiryDrawer from "../components/InquiryDrawer";
 import { getInquiries } from "../services/propertyService";
 import { Search, MessageSquare, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 function Inquiries() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Inquiries() {
       setInquiries(res.data.data);
     } catch (err) {
       console.error(err);
-      alert("Failed to load inquiries.");
+      toast.error("Failed to load inquiries.");
     } finally {
       setLoading(false);
     }

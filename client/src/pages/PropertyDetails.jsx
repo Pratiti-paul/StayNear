@@ -24,6 +24,7 @@ import {
   getWishlist,
   createInquiry,
 } from "../services/propertyService";
+import { toast } from "sonner";
 
 function PropertyDetails() {
   const { id } = useParams();
@@ -68,26 +69,28 @@ function PropertyDetails() {
 
   const handleToggleWishlist = async () => {
     if (!localStorage.getItem("token")) {
-      alert("Please login to add this property to your wishlist");
+      toast.warning("Please login to add this property to your wishlist");
       return;
     }
     try {
       if (isWishlisted) {
         await removeFromWishlist(property._id);
         setIsWishlisted(false);
+        toast.success("Removed from wishlist");
       } else {
         await addToWishlist(property._id);
         setIsWishlisted(true);
+        toast.success("Added to wishlist");
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to update wishlist");
+      toast.error(err.response?.data?.message || "Failed to update wishlist");
     }
   };
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault();
     if (!localStorage.getItem("token")) {
-      alert("Please login to submit an inquiry");
+      toast.warning("Please login to submit an inquiry");
       return;
     }
     try {
@@ -97,13 +100,13 @@ function PropertyDetails() {
         moveInDate: inquiryDate,
         message: inquiryMsg,
       });
-      alert("Inquiry sent successfully to owner!");
+      toast.success("Inquiry sent successfully to owner!");
       setShowInquiryModal(false);
       setInquiryDate("");
       setInquiryMsg("");
       setInquirySubmitting(false);
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to submit inquiry");
+      toast.error(err.response?.data?.message || "Failed to submit inquiry");
       setInquirySubmitting(false);
     }
   };

@@ -21,6 +21,7 @@ import {
   getInquiries,
   updateInquiryStatus,
 } from "../services/propertyService";
+import { toast } from "sonner";
 
 function Owner() {
   const [view, setView] = useState("dashboard"); // dashboard, create, edit
@@ -89,10 +90,10 @@ function Owner() {
 
       if (view === "create") {
         await createProperty(data);
-        alert("Property listed successfully!");
+        toast.success("Property listed successfully!");
       } else if (view === "edit" && selectedProperty) {
         await updateProperty(selectedProperty._id, data);
-        alert("Property updated successfully!");
+        toast.success("Property updated successfully!");
       }
 
       // Reset Form and View
@@ -100,7 +101,7 @@ function Owner() {
       fetchDashboardData();
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Operation failed");
+      toast.error(err.response?.data?.message || "Operation failed");
       setSubmitting(false);
     }
   };
@@ -128,24 +129,30 @@ function Owner() {
     setView("edit");
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this listing?")) return;
-    try {
-      await deleteProperty(id);
-      alert("Property deleted.");
-      fetchDashboardData();
-    } catch (err) {
-      alert("Failed to delete property.");
-    }
+  const handleDelete = (id) => {
+    toast("Are you sure you want to delete this listing?", {
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await deleteProperty(id);
+            toast.success("Property deleted.");
+            fetchDashboardData();
+          } catch (err) {
+            toast.error("Failed to delete property.");
+          }
+        },
+      },
+    });
   };
 
   const handleInquiryStatusChange = async (id, status) => {
     try {
       await updateInquiryStatus(id, status);
-      alert(`Inquiry status updated to ${status}`);
+      toast.success(`Inquiry status updated to ${status}`);
       fetchDashboardData();
     } catch (err) {
-      alert("Failed to update inquiry status.");
+      toast.error("Failed to update inquiry status.");
     }
   };
 

@@ -15,6 +15,7 @@ import Owner from "./pages/Owner";
 import Admin from "./pages/Admin";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "sonner";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -29,6 +30,7 @@ function ScrollToTop() {
 function App() {
   return (
     <BrowserRouter>
+      <Toaster richColors position="top-right" closeButton />
       <ScrollToTop />
       <Routes>
         {/* Authentication */}

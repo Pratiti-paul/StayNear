@@ -12,6 +12,7 @@ import {
   Check,
   Building2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 function InquiryDrawer({ inquiry, isOpen, onClose }) {
   const [animate, setAnimate] = useState(false);
@@ -77,7 +78,7 @@ function InquiryDrawer({ inquiry, isOpen, onClose }) {
 
   const handleCopyId = () => {
     navigator.clipboard.writeText(_id);
-    alert("Inquiry ID copied to clipboard!");
+    toast.success("Inquiry ID copied to clipboard!");
   };
 
   const getShortId = (id) => {
