@@ -1,5 +1,6 @@
 import { LayoutDashboard, Building2, Users2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 function AdminSidebar({ activeTab, setActiveTab }) {
   const navigate = useNavigate();
@@ -11,8 +12,16 @@ function AdminSidebar({ activeTab, setActiveTab }) {
   ];
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
+    toast("Are you sure you want to logout?", {
+      action: {
+        label: "Logout",
+        onClick: () => {
+          localStorage.clear();
+          toast.success("Logged out successfully");
+          navigate("/");
+        },
+      },
+    });
   };
 
   return (

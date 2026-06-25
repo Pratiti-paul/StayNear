@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   LogOut,
 } from "lucide-react";
+import { toast } from "sonner";
 
 function AdminNavbar() {
   const navigate = useNavigate();
@@ -17,14 +18,16 @@ function AdminNavbar() {
   const dropdownRef = useRef(null);
 
   const handleLogout = () => {
-    const confirm = window.confirm(
-      "Are you sure you want to logout?"
-    );
-
-    if (!confirm) return;
-
-    localStorage.clear();
-    navigate("/");
+    toast("Are you sure you want to logout?", {
+      action: {
+        label: "Logout",
+        onClick: () => {
+          localStorage.clear();
+          toast.success("Logged out successfully");
+          navigate("/");
+        },
+      },
+    });
   };
 
   useEffect(() => {
