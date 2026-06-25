@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 import FilterSidebar from "../components/FilterSidebar";
 import PropertyCard from "../components/PropertyCard";
+import PropertyDetailsModal from "../components/PropertyDetailsModal";
 import { getProperties, getWishlist } from "../services/propertyService";
 
 function Explore() {
@@ -12,6 +13,8 @@ function Explore() {
   const [wishlistIds, setWishlistIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Filters State
   const [propertyType, setPropertyType] = useState("");
@@ -133,6 +136,10 @@ function Explore() {
                       key={property._id}
                       property={property}
                       isWishlisted={wishlistIds.includes(property._id)}
+                      onViewDetails={(prop) => {
+                        setSelectedProperty(prop);
+                        setShowModal(true);
+                      }}
                     />
                   ))}
                 </div>
@@ -156,6 +163,22 @@ function Explore() {
           </div>
         </div>
       </main>
+
+      {showModal && selectedProperty && (
+        <PropertyDetailsModal
+          property={selectedProperty}
+          isWishlistedInitially={wishlistIds.includes(selectedProperty._id)}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedProperty(null);
+          }}
+          onWishlistToggle={(id, isLiked) => {
+            setWishlistIds((prev) =>
+              isLiked ? [...prev, id] : prev.filter((wId) => wId !== id)
+            );
+          }}
+        />
+      )}
 
       <Footer />
     </>

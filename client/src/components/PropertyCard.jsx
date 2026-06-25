@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { addToWishlist, removeFromWishlist } from "../services/propertyService";
 
-function PropertyCard({ property, isWishlisted, onWishlistRemoved }) {
+function PropertyCard({ property, isWishlisted, onWishlistRemoved, onViewDetails }) {
   const [liked, setLiked] = useState(isWishlisted || false);
 
   useEffect(() => {
@@ -139,16 +139,21 @@ function PropertyCard({ property, isWishlisted, onWishlistRemoved }) {
         <div className="my-6 border-t border-slate-200"></div>
 
         {/* Bottom */}
-        <Link
-          to={`/property/${property._id}`}
-          className="flex items-center justify-between font-semibold text-teal-700 transition hover:text-teal-800"
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (onViewDetails) {
+              onViewDetails(property);
+            }
+          }}
+          className="w-full flex items-center justify-between font-semibold text-teal-700 transition hover:text-teal-800 cursor-pointer bg-transparent border-none text-left"
         >
           <span>View Details</span>
           <ArrowRight
             size={18}
             className="transition-transform duration-300 group-hover:translate-x-1"
           />
-        </Link>
+        </button>
       </div>
     </div>
   );

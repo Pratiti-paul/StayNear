@@ -9,6 +9,7 @@ import Explore from "./pages/Explore";
 import Wishlist from "./pages/Wishlist";
 import Inquiries from "./pages/Inquiries";
 import Profile from "./pages/Profile";
+import PropertyDetails from "./pages/PropertyDetails";
 
 import Owner from "./pages/Owner";
 import Admin from "./pages/Admin";
@@ -76,6 +77,15 @@ function App() {
           element={
             <ProtectedRoute role="seeker">
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/property/:id"
+          element={
+            <ProtectedRoute role="seeker">
+              <PropertyDetails />
             </ProtectedRoute>
           }
         />

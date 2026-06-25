@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PropertyCard from "../components/PropertyCard";
+import PropertyDetailsModal from "../components/PropertyDetailsModal";
 import { getWishlist } from "../services/propertyService";
 
 function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const fetchWishlist = async () => {
     try {
@@ -71,6 +74,10 @@ function Wishlist() {
                     property={item.property}
                     isWishlisted={true}
                     onWishlistRemoved={handleWishlistRemoved}
+                    onViewDetails={(prop) => {
+                      setSelectedProperty(prop);
+                      setShowModal(true);
+                    }}
                   />
                 );
               })}
@@ -87,6 +94,22 @@ function Wishlist() {
           )}
         </div>
       </main>
+
+      {showModal && selectedProperty && (
+        <PropertyDetailsModal
+          property={selectedProperty}
+          isWishlistedInitially={true}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedProperty(null);
+          }}
+          onWishlistToggle={(id, isLiked) => {
+            if (!isLiked) {
+              handleWishlistRemoved(id);
+            }
+          }}
+        />
+      )}
 
       <Footer />
     </>

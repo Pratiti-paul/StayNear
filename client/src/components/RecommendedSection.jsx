@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getProperties, getWishlist } from "../services/propertyService";
 import PropertyCard from "./PropertyCard";
+import PropertyDetailsModal from "./PropertyDetailsModal";
 
 function RecommendedSection() {
   const [properties, setProperties] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,6 +97,10 @@ function RecommendedSection() {
                 key={property._id}
                 property={property}
                 isWishlisted={wishlistIds.includes(property._id)}
+                onViewDetails={(prop) => {
+                  setSelectedProperty(prop);
+                  setShowModal(true);
+                }}
               />
             ))}
           </div>
@@ -103,6 +110,22 @@ function RecommendedSection() {
           </div>
         )}
       </div>
+
+      {showModal && selectedProperty && (
+        <PropertyDetailsModal
+          property={selectedProperty}
+          isWishlistedInitially={wishlistIds.includes(selectedProperty._id)}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedProperty(null);
+          }}
+          onWishlistToggle={(id, isLiked) => {
+            setWishlistIds((prev) =>
+              isLiked ? [...prev, id] : prev.filter((wId) => wId !== id)
+            );
+          }}
+        />
+      )}
     </section>
   );
 }
