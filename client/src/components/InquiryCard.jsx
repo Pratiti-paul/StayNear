@@ -6,7 +6,7 @@ function InquiryCard({ inquiry, onViewDetails }) {
   const getImageUrl = (images) => {
     if (images && images.length > 0) {
       const img = images[0];
-      return img.startsWith("http") ? img : `http://localhost:5002${img}`;
+      return img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
     }
     return "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80";
   };
