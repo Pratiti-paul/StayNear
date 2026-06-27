@@ -1,6 +1,6 @@
 # StayNear
 
-StayNear is a full-stack student accommodation platform designed to help students discover and connect with verified rental properties near their colleges. The platform provides separate experiences for students (seekers) and property owners, enabling seamless property discovery, listing management, wishlists, inquiries, and secure authentication through a role-based access control (RBAC) system.
+StayNear is a full-stack student accommodation platform designed to help students discover and connect with verified rental properties near their colleges. The platform provides separate experiences for **Seekers (Students), Property Owners, and Admins**, enabling seamless property discovery, listing management, inquiry handling, and secure authentication through a Role-Based Access Control (RBAC) system.
 
 ---
 
@@ -14,6 +14,7 @@ StayNear is a full-stack student accommodation platform designed to help student
 * Property Inquiry System
 * Property Image Uploads
 * Owner Property Management Dashboard
+* Admin Dashboard for Platform Moderation
 * Responsive User Interface
 * Protected Routes & Middleware
 * Toast Notifications & Loading States
@@ -52,7 +53,7 @@ StayNear is a full-stack student accommodation platform designed to help student
 
 * Register & Login
 * Browse all verified properties
-* View property details
+* View detailed property information
 * Search and filter accommodations
 * Save properties to wishlist
 * Submit property inquiries
@@ -61,12 +62,25 @@ StayNear is a full-stack student accommodation platform designed to help student
 ### Owner
 
 * Register & Login
-* Access owner dashboard
+* Access Owner Dashboard
 * Add new property listings
 * Upload property images
 * Edit property details
 * Delete property listings
-* Manage listed properties
+* View and manage own properties
+* View inquiries received for listed properties
+
+### Admin
+
+* Secure Admin Login
+* Access Admin Dashboard
+* View all registered users
+* View all property listings
+* Approve / Moderate platform content
+* Delete inappropriate properties
+* Manage users and owners
+* Monitor inquiries
+* Maintain overall platform data
 
 ---
 
@@ -112,13 +126,13 @@ StayNear/
 
 ### Properties
 
-| Method | Endpoint | Description          | Protected |
-| ------ | -------- | -------------------- | --------- |
-| GET    | /        | Get all properties   | ❌         |
-| GET    | /:id     | Get property details | ❌         |
-| POST   | /        | Add new property     | ✅ (Owner) |
-| PUT    | /:id     | Update property      | ✅ (Owner) |
-| DELETE | /:id     | Delete property      | ✅ (Owner) |
+| Method | Endpoint | Description          | Protected       |
+| ------ | -------- | -------------------- | --------------- |
+| GET    | /        | Get all properties   | ❌               |
+| GET    | /:id     | Get property details | ❌               |
+| POST   | /        | Add new property     | ✅ (Owner)       |
+| PUT    | /:id     | Update property      | ✅ (Owner)       |
+| DELETE | /:id     | Delete property      | ✅ (Owner/Admin) |
 
 ---
 
@@ -141,16 +155,39 @@ StayNear/
 
 ---
 
-## Property Management
+### Admin
 
-Owners can efficiently manage their rental listings through a dedicated dashboard.
+| Method | Endpoint      | Description         | Protected |
+| ------ | ------------- | ------------------- | --------- |
+| GET    | /users        | View all users      | ✅ (Admin) |
+| GET    | /properties   | View all properties | ✅ (Admin) |
+| DELETE | /property/:id | Remove property     | ✅ (Admin) |
+| GET    | /inquiries    | View all inquiries  | ✅ (Admin) |
+
+---
+
+## Owner Dashboard
+
+The Owner Dashboard allows property owners to efficiently manage their rental listings.
 
 * Add new rental properties
 * Upload multiple property images
-* Update property information
-* Remove outdated listings
-* View all listed properties
-* Manage inquiries from interested students
+* Edit property details
+* Delete property listings
+* View listed properties
+* Manage inquiries from students
+
+---
+
+## Admin Dashboard
+
+The Admin Dashboard provides complete platform management.
+
+* Monitor all users
+* Manage property listings
+* Remove inappropriate listings
+* Monitor inquiries
+* Maintain platform integrity
 
 ---
 
@@ -159,7 +196,7 @@ Owners can efficiently manage their rental listings through a dedicated dashboar
 * JWT Authentication
 * Password Hashing using bcrypt
 * Protected API Routes
-* Role-Based Authorization
+* Role-Based Authorization (RBAC)
 * Secure Environment Variables
 * Image Upload Validation
 
@@ -170,11 +207,11 @@ Owners can efficiently manage their rental listings through a dedicated dashboar
 * Google Maps Integration
 * Property Reviews & Ratings
 * Online Booking System
-* Real-time Chat between Students & Owners
+* Real-time Chat
 * Email Notifications
-* Forgot Password Functionality
+* Forgot Password
 * Property Recommendation System
-* Admin Dashboard & Analytics
+* Admin Analytics Dashboard
 
 ---
 
