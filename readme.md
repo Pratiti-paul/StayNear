@@ -1,84 +1,96 @@
-# 🏡 StayNear
+# StayNear
 
-StayNear is a full-stack accommodation booking platform designed specifically for students looking for verified rental properties near their colleges. The platform enables students to browse accommodations, save favorites, submit inquiries, and connect with property owners, while property owners can list and manage their rental properties through a dedicated dashboard.
-
----
-
-## 🚀 Features
-
-### 👨‍🎓 Student (Seeker)
-
-* User Registration & Login using JWT Authentication
-* Browse verified rental properties
-* Search and filter accommodations
-* View detailed property information
-* Add and remove properties from Wishlist
-* Submit property inquiries
-* Responsive and user-friendly interface
-
-### 🏠 Property Owner
-
-* Secure authentication
-* Add new property listings
-* Upload property images
-* Edit and delete listed properties
-* View and manage their own listings
-
-### 🔐 Authentication & Security
-
-* JWT-based Authentication
-* Password hashing using bcrypt
-* Role-Based Access Control (Seeker & Owner)
-* Protected API Routes
-* Environment variable configuration for sensitive credentials
+StayNear is a full-stack student accommodation platform designed to help students discover and connect with verified rental properties near their colleges. The platform provides separate experiences for students (seekers) and property owners, enabling seamless property discovery, listing management, wishlists, inquiries, and secure authentication through a role-based access control (RBAC) system.
 
 ---
 
-## 🛠️ Tech Stack
+## Features
+
+* Role-Based Access Control (Seeker, Owner, Admin)
+* Secure Authentication & Authorization (JWT-based)
+* Browse Verified Student Accommodations
+* Advanced Property Search & Filtering
+* Wishlist Management
+* Property Inquiry System
+* Property Image Uploads
+* Owner Property Management Dashboard
+* Responsive User Interface
+* Protected Routes & Middleware
+* Toast Notifications & Loading States
+
+---
+
+## Tech Stack
 
 ### Frontend
 
 * React.js
-* React Router DOM
-* Axios
+* React Router
 * Tailwind CSS
+* Axios
 * React Toastify
 
 ### Backend
 
 * Node.js
 * Express.js
-* MongoDB Atlas
-* Mongoose
 * JWT Authentication
-* bcrypt
+* bcrypt.js
+* Multer (Image Uploads)
+* RBAC Middleware
 
-### Deployment
+### Database
 
-* Frontend: Vercel
-* Backend: Render
-* Database: MongoDB Atlas
+* MongoDB Atlas (Cloud-hosted)
+* Mongoose ODM
+
+---
+
+## RBAC Roles
+
+### Seeker
+
+* Register & Login
+* Browse all verified properties
+* View property details
+* Search and filter accommodations
+* Save properties to wishlist
+* Submit property inquiries
+* Manage profile
+
+### Owner
+
+* Register & Login
+* Access owner dashboard
+* Add new property listings
+* Upload property images
+* Edit property details
+* Delete property listings
+* Manage listed properties
 
 ---
 
 ## 📂 Project Structure
 
-```
-StayNear
-│
-├── client
-│   ├── src
-│   ├── public
+```text
+StayNear/
+├── server/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── uploads/
+│   ├── server.js
 │   └── package.json
 │
-├── server
-│   ├── config
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
-│   ├── uploads
-│   ├── server.js
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── assets/
+│   │   ├── context/
+│   │   └── App.jsx
 │   └── package.json
 │
 └── README.md
@@ -86,154 +98,92 @@ StayNear
 
 ---
 
-## ⚙️ Environment Variables
-
-Create a `.env` file inside the **server** directory.
-
-```env
-PORT=5002
-
-MONGODB_URI=your_mongodb_connection_string
-
-JWT_SECRET=your_super_secret_key
-
-JWT_EXPIRE=7d
-```
-
-Create a `.env` file inside the **client** directory.
-
-```env
-VITE_API_URL=http://localhost:5002/api
-```
-
-For production:
-
-```env
-VITE_API_URL=https://your-render-backend.onrender.com/api
-```
-
----
-
-## 📦 Installation
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/StayNear.git
-```
-
-```bash
-cd StayNear
-```
-
----
-
-### Install Frontend
-
-```bash
-cd client
-npm install
-npm run dev
-```
-
----
-
-### Install Backend
-
-```bash
-cd server
-npm install
-npm run dev
-```
-
----
-
-## 🔗 API Endpoints
+## API Endpoints
 
 ### Authentication
 
-| Method | Endpoint             | Description        |
-| ------ | -------------------- | ------------------ |
-| POST   | `/api/auth/register` | Register User      |
-| POST   | `/api/auth/login`    | Login User         |
-| GET    | `/api/auth/me`       | Get Logged-in User |
+| Method | Endpoint  | Description                    | Protected |
+| ------ | --------- | ------------------------------ | --------- |
+| POST   | /register | Register a new user            | ❌         |
+| POST   | /login    | Authenticate user & return JWT | ❌         |
+| GET    | /me       | Get logged-in user profile     | ✅         |
+
+---
 
 ### Properties
 
-* Get All Properties
-* Get Single Property
-* Add Property
-* Update Property
-* Delete Property
+| Method | Endpoint | Description          | Protected |
+| ------ | -------- | -------------------- | --------- |
+| GET    | /        | Get all properties   | ❌         |
+| GET    | /:id     | Get property details | ❌         |
+| POST   | /        | Add new property     | ✅ (Owner) |
+| PUT    | /:id     | Update property      | ✅ (Owner) |
+| DELETE | /:id     | Delete property      | ✅ (Owner) |
+
+---
 
 ### Wishlist
 
-* Add to Wishlist
-* Remove from Wishlist
-* Get Wishlist
+| Method | Endpoint     | Description                   | Protected |
+| ------ | ------------ | ----------------------------- | --------- |
+| GET    | /            | Get user's wishlist           | ✅         |
+| POST   | /:propertyId | Add property to wishlist      | ✅         |
+| DELETE | /:propertyId | Remove property from wishlist | ✅         |
+
+---
 
 ### Inquiry
 
-* Submit Inquiry
-* Get All Inquiries
+| Method | Endpoint | Description    | Protected       |
+| ------ | -------- | -------------- | --------------- |
+| POST   | /        | Submit inquiry | ✅               |
+| GET    | /        | View inquiries | ✅ (Owner/Admin) |
 
 ---
 
-## 📸 Screenshots
+## Property Management
 
-Add screenshots of:
+Owners can efficiently manage their rental listings through a dedicated dashboard.
 
-* Home Page
-* Login Page
-* Registration Page
-* Property Listing
-* Property Details
-* Wishlist
-* Owner Dashboard
-* Add Property Page
+* Add new rental properties
+* Upload multiple property images
+* Update property information
+* Remove outdated listings
+* View all listed properties
+* Manage inquiries from interested students
 
 ---
 
-## 🌟 Future Enhancements
+## Security Features
 
-* Google Authentication
-* Email Verification
-* Password Reset
-* Property Reviews & Ratings
-* Google Maps Integration
-* Online Rent Payment
-* Real-time Chat
-* Booking System
-* Admin Dashboard
-* Property Recommendation System
-
----
-
-## 📚 Learning Outcomes
-
-This project helped strengthen my understanding of:
-
-* Full Stack Web Development
-* RESTful API Design
 * JWT Authentication
-* Password Encryption with bcrypt
-* MongoDB & Mongoose
-* CRUD Operations
-* Role-Based Access Control (RBAC)
-* File Uploads
-* Environment Variable Management
-* Deployment using Vercel and Render
+* Password Hashing using bcrypt
+* Protected API Routes
+* Role-Based Authorization
+* Secure Environment Variables
+* Image Upload Validation
 
 ---
 
-## 👩‍💻 Author
+## Future Enhancements
 
-**Pratiti Paul**
-
-GitHub: https://github.com/Pratiti-paul
-
-LinkedIn: *(Add your LinkedIn profile here)*
+* Google Maps Integration
+* Property Reviews & Ratings
+* Online Booking System
+* Real-time Chat between Students & Owners
+* Email Notifications
+* Forgot Password Functionality
+* Property Recommendation System
+* Admin Dashboard & Analytics
 
 ---
 
-## ⭐ If you found this project useful, consider giving it a star!
+## Disclaimer
+
+This project is intended for educational, development, and portfolio purposes only. Property listings and inquiries are simulated for demonstration and learning purposes.
+
+---
+
+## Made with ❤️ by Pratiti Paul
+
+[GitHub](https://github.com/Pratiti-paul)
