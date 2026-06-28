@@ -5,7 +5,7 @@ import connectDB from "./config/database.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 // Route imports
 import authRoutes from "./routes/auth.js";
-import pgRoutes from "./routes/pg.js";
+// import pgRoutes from "./routes/pg.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import inquiryRoutes from "./routes/inquiry.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/pgs", pgRoutes);
+// app.use("/api/pgs", pgRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/properties", propertyRoutes);
