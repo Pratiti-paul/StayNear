@@ -12,7 +12,7 @@ StayNear is a full-stack student accommodation platform designed to help student
 * Advanced Property Search & Filtering
 * Wishlist Management
 * Property Inquiry System
-* Property Image Uploads
+* Property Image Uploads allowed
 * Owner Property Management Dashboard
 * Admin Dashboard for Platform Moderation
 * Responsive User Interface
