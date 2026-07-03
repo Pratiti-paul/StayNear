@@ -38,7 +38,6 @@ StayNear is a full-stack student accommodation platform designed to help student
 * JWT Authentication
 * bcrypt.js
 * Multer (Image Uploads)
-* RBAC Middleware
 
 ### Database
 
