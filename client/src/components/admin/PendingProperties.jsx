@@ -1,4 +1,5 @@
 import { Eye, MapPin, Clock } from "lucide-react";
+import { getImageUrl } from "../../utils/imageUrl";
 
 function PendingProperties({ properties, onView, setActiveTab }) {
   const pendingProperties = properties
@@ -53,10 +54,8 @@ function PendingProperties({ properties, onView, setActiveTab }) {
                 <img
                   src={
                     property.images?.length > 0
-                      ? property.images[0].startsWith("http")
-                        ? property.images[0]
-                        : `${import.meta.env.VITE_API_URL.replace("/api", "")}${property.images[0]}`
-                      : "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=300"
+                      ? getImageUrl(property.images[0])
+                      : getImageUrl()
                   }
                   alt={property.title}
                   className="w-16 h-16 rounded-xl object-cover border"

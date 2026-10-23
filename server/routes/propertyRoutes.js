@@ -17,9 +17,9 @@ const router = express.Router();
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById);
 
-// Protected routes (Owner only)
+// Protected routes (Owner, with admin authorization for edits)
 router.post("/", protect, authorize("owner"), upload.array("images", 10), createProperty);
-router.put("/:id", protect, authorize("owner"), upload.array("images", 10), updateProperty);
+router.put("/:id", protect, authorize("owner", "admin"), upload.array("images", 10), updateProperty);
 
 // Owner / Admin delete route
 router.delete("/:id", protect, deleteProperty);

@@ -10,6 +10,7 @@ import {
   Star,
   Users,
 } from "lucide-react";
+import { getImageUrl } from "../utils/imageUrl";
 import {
   addToWishlist,
   removeFromWishlist,
@@ -76,13 +77,6 @@ function PropertyDetailsModal({ property, onClose, isWishlistedInitially, onWish
       toast.error(err.response?.data?.message || "Failed to submit inquiry");
       setInquirySubmitting(false);
     }
-  };
-
-  const getImageUrl = (img) => {
-    if (!img) {
-      return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80";
-    }
-    return img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
   };
 
   if (!property) return null;

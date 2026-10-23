@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
+import { getImageUrl } from "../utils/imageUrl";
 import {
   X,
   Copy,
   ExternalLink,
-  MessageSquare,
   User,
   Mail,
-  Phone,
   Calendar,
   Clock,
   Check,
@@ -30,14 +29,6 @@ function InquiryDrawer({ inquiry, isOpen, onClose }) {
   if (!isOpen || !inquiry) return null;
 
   const { property, status, moveInDate, message, createdAt, _id } = inquiry;
-
-  const getImageUrl = (images) => {
-    if (images && images.length > 0) {
-      const img = images[0];
-      return img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
-    }
-    return "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=300&q=80";
-  };
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
@@ -147,7 +138,7 @@ function InquiryDrawer({ inquiry, isOpen, onClose }) {
 
             <div className="flex items-start gap-4">
               <img
-                src={getImageUrl(property?.images)}
+                src={getImageUrl(property?.images?.[0])}
                 alt={property?.title}
                 className="w-20 h-20 rounded-2xl object-cover border border-slate-100 shrink-0"
               />

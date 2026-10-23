@@ -187,7 +187,10 @@ export const updateProperty = async (req, res) => {
         .json({ success: false, message: "Property not found" });
     }
 
-    if (property.owner.toString() !== req.user.id) {
+    const isOwner = String(property.owner) === String(req.user.id);
+    const isAdmin = req.user.role === "admin";
+
+    if (!isOwner && !isAdmin) {
       return res
         .status(403)
         .json({ success: false, message: "Not authorized to update this property" });

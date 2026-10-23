@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { getImageUrl } from "../utils/imageUrl";
 import {
   MapPin,
   Star,
@@ -111,14 +112,6 @@ function PropertyDetails() {
     }
   };
 
-  const getImageUrl = (images) => {
-    if (images && images.length > 0) {
-      const img = images[0];
-      return img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
-    }
-    return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1200&q=80";
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col justify-between bg-slate-50">
@@ -168,7 +161,7 @@ function PropertyDetails() {
           {/* Image Gallery */}
           <div className="relative group overflow-hidden rounded-3xl shadow-lg h-[500px]">
             <img
-              src={getImageUrl(property.images)}
+              src={getImageUrl(property.images?.[0])}
               alt={property.title}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
             />

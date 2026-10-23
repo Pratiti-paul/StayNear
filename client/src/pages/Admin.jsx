@@ -9,6 +9,7 @@ import RecentUsers from "../components/admin/RecentUsers";
 import PropertyTable from "../components/admin/PropertyTable";
 import UserTable from "../components/admin/UserTable";
 import { Check, Trash2, X } from "lucide-react";
+import { getImageUrl } from "../utils/imageUrl";
 import {
   getAdminStats,
   getAdminUsers,
@@ -382,7 +383,7 @@ function Admin() {
                   {selectedProperty.images.map((img, idx) => (
                     <img
                       key={idx}
-                      src={img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`}
+                      src={getImageUrl(img)}
                       alt={`gallery-${idx}`}
                       className="w-full h-40 object-cover rounded-xl border border-slate-200"
                     />

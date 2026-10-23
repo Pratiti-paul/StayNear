@@ -7,6 +7,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { addToWishlist, removeFromWishlist } from "../services/propertyService";
+import { getImageUrl } from "../utils/imageUrl";
 import { toast } from "sonner";
 
 function PropertyCard({ property, isWishlisted, onWishlistRemoved, onViewDetails }) {
@@ -36,20 +37,12 @@ function PropertyCard({ property, isWishlisted, onWishlistRemoved, onViewDetails
     }
   };
 
-  const getImageUrl = (images) => {
-    if (images && images.length > 0) {
-      const img = images[0];
-      return img.startsWith("http") ? img : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
-    }
-    return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80"; // unsplash fallback room
-  };
-
   return (
     <div className="group overflow-hidden rounded-3xl bg-white border border-slate-200 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
       {/* Image */}
       <div className="relative overflow-hidden">
         <img
-          src={getImageUrl(property.images)}
+          src={getImageUrl(property.images?.[0])}
           alt={property.title}
           className="h-72 w-full object-cover transition duration-500 group-hover:scale-105"
         />

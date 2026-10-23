@@ -22,6 +22,7 @@ import {
   updateInquiryStatus,
 } from "../services/propertyService";
 import { toast } from "sonner";
+import { getImageUrl } from "../utils/imageUrl";
 
 function Owner() {
   const [view, setView] = useState("dashboard"); // dashboard, create, edit
@@ -290,8 +291,8 @@ function Owner() {
                                     <img
                                       src={
                                         prop.images && prop.images.length > 0
-                                          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${prop.images[0]}`
-                                          : "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=80&q=80"
+                                          ? getImageUrl(prop.images[0])
+                                          : getImageUrl()
                                       }
                                       alt={prop.title}
                                       className="w-12 h-12 rounded-xl object-cover"

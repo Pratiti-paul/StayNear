@@ -1,17 +1,7 @@
 import { ShieldCheck, ShieldAlert, Eye } from "lucide-react";
+import { getImageUrl } from "../../utils/imageUrl";
 
 function PropertyTable({ properties, onView }) {
-  const getImageUrl = (images) => {
-    if (images && images.length > 0) {
-      const img = images[0];
-      return img.startsWith("http")
-        ? img
-        : `${import.meta.env.VITE_API_URL.replace("/api", "")}${img}`;
-    }
-
-    return "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=80&q=80";
-  };
-
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-slate-100 flex items-center justify-between">
@@ -48,7 +38,7 @@ function PropertyTable({ properties, onView }) {
                   <td className="px-8 py-4">
                     <div className="flex items-center gap-4">
                       <img
-                        src={getImageUrl(prop.images)}
+                        src={getImageUrl(prop.images?.[0])}
                         alt={prop.title}
                         className="w-12 h-12 rounded-xl object-cover border border-slate-150 shrink-0"
                       />
