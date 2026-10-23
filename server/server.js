@@ -1,16 +1,17 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import connectDB from "./config/database.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+
 // Route imports
 import authRoutes from "./routes/auth.js";
-// import pgRoutes from "./routes/pg.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import inquiryRoutes from "./routes/inquiry.js";
 import propertyRoutes from "./routes/propertyRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
-dotenv.config();
+
 const app = express();
 connectDB();
 // Middleware

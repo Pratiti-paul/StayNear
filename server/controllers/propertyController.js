@@ -134,7 +134,7 @@ export const createProperty = async (req, res) => {
 
     let images = [];
     if (req.files && req.files.length > 0) {
-      images = req.files.map((file) => `/uploads/${file.filename}`);
+      images = req.files.map((file) => file.path);
     }
 
     let parsedAmenities = [];
@@ -213,7 +213,7 @@ export const updateProperty = async (req, res) => {
 
     let images = property.images;
     if (req.files && req.files.length > 0) {
-      images = req.files.map((file) => `/uploads/${file.filename}`);
+      images = req.files.map((file) => file.path);
     }
 
     let parsedAmenities = property.amenities;
